@@ -101,7 +101,7 @@ class ProductoController
 
   static public function getConsultaProducto()
   {
-    $busqueda = $_GET['buscar'];
+    $busqueda = isset($_GET['buscar']) ? $_GET['buscar'] : '..';
 
 
     $resultados = ProductoModel::getConsultaProducto($busqueda);

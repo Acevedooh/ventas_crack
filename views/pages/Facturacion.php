@@ -45,15 +45,7 @@ $producto = ProductoController::getProducto(null, null);
                       </div>
                     </div>
                     <div class="col-6-lg col-xl-6 col-sm-12">
-
                       <div class="form-group">
-
-                        <div class="input-group">
-                          <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-key"></i></span>
-                          </div>
-                          <input type="text" class="form-control" id="nuevaVenta" name="nuevaVenta" value="10002343" readonly>
-                        </div>
                       </div>
                     </div>
                     <div class="col-6-lg col-xl-6 col-sm-12">
@@ -98,25 +90,37 @@ $producto = ProductoController::getProducto(null, null);
                             ?>
                           </select>
                           <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
-                              <i class="icon-database-add"></i> Agregar Nuevo <?php echo $titulo ?>
+                              <i class="icon-database-add"></i> Agregar Nuevo
                             </button></span>
                         </div>
                       </div>
                     </div>
 
-                    <div class="col-6-lg col-xl-6 col-sm-12">
+                    <div class="w-100"></div>
+                    <div class="col-md-3 col-sm-12">
                       <div class="form-group">
+                        <label for="consultaProducto">Producto</label>
                         <div class="input-group">
-
                           <select class="form-control select2" name="consultaProducto" id="consultaProducto">
                             <option value='' disabled selected>Seleccione un Producto</option>
                           </select>
-                          <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
-                              <i class="icon-database-add"></i>+ <?php echo $titulo ?>
-                            </button></span>
                         </div>
                       </div>
-
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label for="">Cantidad</label>
+                        <input type="number" name="cantidad" id="cantidad" value="1" min="1" class="form-control" placeholder="" required>
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label for="">Precio</label>
+                        <input type="text" name="precio" id="precio" class="form-control" disabled readonly>
+                      </div>
+                    </div>
+                    <div class="col-1" style="padding-top: 30px;">
+                      <button type="button" id="btnAgregarProducto" type="button" class="btn btn-primary">Agregar</button>
                     </div>
                   </div>
                 </form>
@@ -145,67 +149,41 @@ $producto = ProductoController::getProducto(null, null);
           </tr>
         </thead>
         <tbody id="bodyProductos">
-          <tr>
-            <th>
-
-              <div class="col-xs-6" style="padding-right:0px">
-
-                <div class="input-group">
-
-                  <input type="text" class="form-control" id="agregarProducto" name="agregarProducto" placeholder="Descripción del producto" required>
-
-                </div>
-
-              </div>
-            </th>
-            <th>
-
-
-              <div class="col-6-lg col-xl-6 col-sm-12">
-
-                <input type="number" class="form-control" id="nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" placeholder="0" required>
-
-              </div>
-
-            </th>
-            <th>
-
-              <div class="col-xs-3" style="padding-left:0px">
-
-                <div class="input-group">
-
-                  <span class="input-group-addon"><i class="ion ion-social-usd"></i></span>
-
-                  <input type="number" min="1" class="form-control" id="nuevoPrecioProducto" name="nuevoPrecioProducto" placeholder="20000" readonly required>
-
-                </div>
-
-              </div>
-            </th>
-            <th>Nombre</th>
-            <th>treu</th>
-            <th>
-              <div class="btn-group">
-
-                <span class="input-group-addon"><button type="button" class="btn btn-danger btn-xm"><i class="fa fa-times"></i></button></span>
-              </div>
-            </th>
-          </tr>
         </tbody>
+        <!-- <tfoot>
+          <tr>
+            <th>Productos:</th>
+   
+            <td id="totalCantidad" align="center" colspan="2">0</td>
+          </tr>
+          <tr>
+            <th style="width:50%">Subtotal:</th>
+      
+            <td id="subTotal" align="center" colspan="2">0</td>
+          </tr>
+          <tr>
+            <th>Itbis 18%</th>
+          
+            <td id="totalItbis" align="center" colspan="2">0</td>
+          </tr>
+          <th>Total:</th>
+
+          <td id="totalImporte" align="center" colspan="2">0</td>
+          </tr>
+        </tfoot> -->
       </table>
     </div>
     <!-- /.col -->
   </div>
   <!-- /.row -->
-
   <div class="row">
     <!-- accepted payments column -->
     <div class="col-6">
-      <p class="lead">Payment Methods:</p>
-      <!-- <img src="../../dist/img/credit/visa.png" alt="Visa">
-          <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
-          <img src="../../dist/img/credit/american-express.png" alt="American Express">
-          <img src="../../dist/img/credit/paypal2.png" alt="Paypal"> -->
+      <p class="lead">Metodo De Pago:</p>
+      <img src="../../dist/img/credit/visa.png" alt="Visa">
+      <img src="../../dist/img/credit/mastercard.png" alt="Mastercard">
+      <img src="../../dist/img/credit/american-express.png" alt="American Express">
+      <img src="../../dist/img/credit/paypal2.png" alt="Paypal">
 
       <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
         Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
@@ -215,34 +193,27 @@ $producto = ProductoController::getProducto(null, null);
     </div>
     <!-- /.col -->
     <div class="col-6">
-
-      <p class="lead">Amount Due 2/22/2014</p>
-
+      <p class="lead">Monto Adeudado 2/22/2014</p>
 
       <div class="table-responsive">
         <table class="table">
           <tr>
-            <th style="width:50%">Productos:</th>
+            <th>Productos:</th>
 
-            <!-- <td>$250.30</td> -->
             <td id="totalCantidad" align="center" colspan="2">0</td>
-
           </tr>
           <tr>
             <th style="width:50%">Subtotal:</th>
-            <!-- <td>$250.30</td> -->
-            <td id="subTotal" align="center" colspan="2">0</td>
 
+            <td id="subTotal" align="center" colspan="2">0</td>
           </tr>
           <tr>
             <th>Itbis 18%</th>
-            <!-- <td>$10.34</td> -->
+
             <td id="totalItbis" align="center" colspan="2">0</td>
-
           </tr>
-
           <th>Total:</th>
-          <!-- <td>$265.24</td> -->
+
           <td id="totalImporte" align="center" colspan="2">0</td>
           </tr>
         </table>
@@ -250,12 +221,15 @@ $producto = ProductoController::getProducto(null, null);
     </div>
     <!-- /.col -->
   </div>
-  <!-- /.row -->
 
-  <!-- this row will not appear when printing -->
-  <div class="row no-print">
-    <div class="col-12">
-      <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+
+
+  <div class="row">
+    <!-- accepted payments column -->
+    <!-- /.col -->
+    <div class="col-6">
+    </div>
+    <div class="col-6"> <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
       <button type="submit" id="btnFacturar" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Facturar
       </button>
       <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
@@ -265,6 +239,13 @@ $producto = ProductoController::getProducto(null, null);
         <i class="fas fa-download"></i> Cancelar
       </button>
     </div>
+    <!-- /.col -->
+  </div>
+  <!-- /.row -->
+
+  <!-- this row will not appear when printing -->
+  <div class="row no-print">
+
   </div>
 
   <!-- /.invoice -->

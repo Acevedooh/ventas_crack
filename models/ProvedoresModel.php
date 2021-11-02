@@ -1,7 +1,7 @@
 <?php
 
 require_once "Conection.php";
-session_start();
+// session_start();
 
 class ProvedoresModel
 {

@@ -5,14 +5,14 @@
 class ContactoController
 {
 
-  public function getContacto($parame)
+  public static function getContacto($parame)
   {
     $resutado = ContactoModel::getContacto($parame);
     return $resutado;
   }
 
 
-  public function getIdTipoComprobante()
+  public static function getIdTipoComprobante()
   {
 
     $respuesta = ContactoModel::getIdTipoComprobante();

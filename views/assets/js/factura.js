@@ -1,51 +1,202 @@
 $(function () {
-  $("#busqueda").submit((e) => {
-    e.preventDefault();
+  // $("#busqueda").submit((e) => {
+  //   e.preventDefault();
 
-    if ($("#codigo").prop("checked")) {
-      ///BUSCAR POR EL CODIGO DEL PRODUCTO
-      consultarProductoCodigo();
-    } else if ($("#descripcion").prop("checked")) {
-      ///BUSCAR POR LA DESCRIPCION DEL PRODUCTO
+  //   if ($("#codigo").prop("checked")) {
+  //     ///BUSCAR POR EL CODIGO DEL PRODUCTO
+  //     consultarProductoCodigo();
+  //   } else if ($("#descripcion").prop("checked")) {
+  //     ///BUSCAR POR LA DESCRIPCION DEL PRODUCTO
 
-      consultarProductoDescripcion();
-    }
-  });
+  //     consultarProductoDescripcion();
+  //   }
+  // });
 
-
-  $('.select2').select2({
-    theme: "bootstrap4",
-    placeholder: 'Seleccione un Producto',
-    minimunInputLength: 3,
-    ajax: {
-      url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
-      data: function (params) {
-        var query = {
-          buscar: params.term,
-          type: 'public'
+    //Busqueda select de los productos
+    $('.select2').select2({
+      theme: "bootstrap4",
+      placeholder: "Select a option",
+      minimumInputLength: 3,
+      ajax: {
+        url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
+        data: function (params) {
+          var query = {
+            buscar: params.term,
+            type: 'public'
+          }
+  
+          // Query parameters will be ?search=[term]&type=public
+          return query;
+        },
+        dataType: "json",
+        type: "GET",
+        // delay: 250,
+        processResults(data) {
+          console.log("data: ", data);
+          return {
+            results: $.map(data, function (item) {
+              return {
+                text: item.nombrePro + ' (' +item.codigoPro+')',
+                id: item.idProducto,
+                precio: item.precioVenta,
+                codigoPro: item.codigoPro
+              };
+            }),
+          };
+        },
+      },
+      templateResult: function (data) {
+        if (data.loading) {
+          return "Cargando";
         }
 
-        // Query parameters will be ?search=[term]&type=public
-        return query;
-      },
-      processResults(data) {
+        // $('#cantidad').focus().select();
+        $('#precio').val(data.precio);
         console.log("data: ", data);
-        return {
-          results: $.map(data, function (item) {
-            return {
-              text: item.nombrePro,
-              id: item.idProducto,
-            };
-          }),
-        };
+        var $contenedor = $(`<option value='${data.id}'>${data.text + '-'}</option>`);
+        // const $contenedor = $(``);
+        return $contenedor;
       },
-    },
-    templateResult: function (data) {
-      console.log('data: ', data);
-      return data;
-    },
-    cache: true
-  });
+      // templateSelection: function (dato) {
+      //   //Agrega el precio del producto al input del precio
+      //   $('#precio').val(dato.precio)
+      //   return dato.nombre ? `${dato.nombre} (${dato.categoria})` : "";
+      // },
+    });
+  
+    $('#btnAgregarProducto').click(function() {
+      const idProducto = $( "#consultaProducto").val();
+
+      //VERIFICAR SI EL PRODUCTO EXISTE EN LA TABLA
+      if($(`#bodyProductos tr[idProducto=${idProducto}]`).length === 0) {
+          const nombre = $( "#consultaProducto option:selected" ).text();
+          const cantidad = $( "#cantidad" ).val();
+          const precio = $( "#precio" ).val();
+          const itbis = Number((Number(cantidad) * Number(precio) ) * 0.18 ).toFixed(2);
+          const importe = Number((Number(cantidad) * Number(precio) ) + Number(itbis) ).toFixed(2);
+          // console.log('click');  
+          const html = 
+          `<tr idProducto=${idProducto}>
+            <td class='descripcion'>${nombre}</td>
+            <td class='cantidad'>
+              <input type='number' class='form-control cantidadTabla' style='width: auto' min='1' value='${cantidad}'>
+            </td>
+            <td class='precio'>
+              ${precio}
+            </td>
+            <td class='itbis'>
+              ${itbis}
+            </td>
+            <td class='importe'>
+              ${importe}
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm eliminar" id><i class="fa fa-trash"></i></button>
+            </td>
+          <tr>`;
+          $('#bodyProductos').append(html);
+      } else {
+        $(`#bodyProductos tr[idProducto=${idProducto}]`).each(function() {
+          const cantidad = Number($(this).find('input.cantidadTabla').val());  
+
+          const precio = Number($(this).find('.precio').html());  
+  
+          
+          $(this).find('input.cantidad').val(Number(cantidad)+Number($('#cantidad').val()));
+          $(this).find('.importe').html(Number(precio) * Number(cantidad).toFixed(2));
+        });
+
+        //Actualizar el producto que se intenta agregar
+        //Cantidad registrada actual
+
+      }
+
+    });
+
+    $('#bodyProductos').on('change', '.cantidadTabla', function() {
+
+
+      console.log('input-cantidad', Number($(this).parent().parent().find('.precio').html()));
+      const precio = Number($(this).parent().parent().find('.precio').html());
+      const cantidad = Number($(this).parent().find('.cantidadTabla').val());
+
+      const subtotal = precio * cantidad;
+      const itbis = subtotal * 0.18;
+      const importe = subtotal + itbis;
+
+      $(this).parent().parent().find('.importe').html(importe.toFixed(2));
+      $(this).parent().parent().find('.itbis').html(itbis.toFixed(2));
+
+      console.log('input-cantidad');
+    });
+
+    $('#bodyProductos').on('click', '.eliminar', function() {
+      $(this).parent().parent().remove();
+    });
+//   $('.select2').select2({
+//     allowClear: true,
+//     minimumResultsForSearch: 1,
+//     ajax: {
+//       url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
+//       data: function (params) {
+//         var query = {
+//           buscar: params.term,
+//           type: 'public'
+//         }
+
+//         // Query parameters will be ?search=[term]&type=public
+//         return query;
+//       },
+//         processResults: function (data) {
+//             return {
+//                 results: data,
+//             };
+//         },
+//         dataType: 'json',
+//         cache: true,
+//     },
+//     escapeMarkup: function(m) {
+//         return m;
+//     },
+//     templateResult: function (result) {
+//         if (result.loading) return 'Loading...';
+//         return result.text + '<h6>' + result.codigoPro + ' ' + result.codigoPro + '</h6>';
+//       },
+// });
+
+  // $('.select2').select2({
+  //   theme: "bootstrap4",
+  //   placeholder: 'Seleccione un Producto',
+  //   minimunInputLength: 3,
+  //   ajax: {
+  //     url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
+  //     data: function (params) {
+  //       var query = {
+  //         buscar: params.term,
+  //         type: 'public'
+  //       }
+
+  //       // Query parameters will be ?search=[term]&type=public
+  //       return query;
+  //     },
+  //     processResults(data) {
+  //       console.log("data: ", data);
+  //       return {
+  //         results: data,
+  //       };
+  //     },
+  //     dataType: 'json',
+  //     cache: true,
+  //   },
+  //   escapeMarkup: function(m) {
+  //     return m;
+  //   },
+  //   templateResult: function (result) {
+  //     if (result.loading) return 'Loading...';
+  //     return result.text + '<h6>' + result.codigoPro + ' ' + result.codigoPro + '</h6>';
+  //     },
+  //   cache: true
+  // });
 
 
 
@@ -57,16 +208,16 @@ $(function () {
   CARGAR LA TABLA DINÁMICA DE VENTAS
   =============================================*/
 
-  $.ajax({
+  // $.ajax({
 
-    url: "ajax/datatable-ventas.ajax.php",
-    success: function (respuesta) {
+  //   url: "ajax/datatable-ventas.ajax.php",
+  //   success: function (respuesta) {
 
-      console.log("respuesta", respuesta);
+  //     console.log("respuesta", respuesta);
 
-    }
+  //   }
 
-  })
+  // })
 
   // $('.tablaVentas').DataTable({
   //   "ajax": "ajax/datatable-ventas.ajax.php",
