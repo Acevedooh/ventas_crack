@@ -123,7 +123,7 @@
                   <label>Nombre <span style="color: red; font-size: 15px;">*</span> </label>
                   <input type="hidden" name="idInventario" value="0" id="idInventario">
                   <div class="form-group">
-                    <input type="text" placeholder="Ingrese el nombre del Almacen" class="form-control" name="nombre" id="nombre" autocomplete="off" required>
+                    <input type="text" placeholder="Ingrese el nombre del Almacen" class="form-control" name="nombre" value="Ingenio Arriba" id="nombre" autocomplete="off" required>
                   </div>
                 </div>
 
@@ -167,23 +167,16 @@
                 <div class="col-12">
                   <label>Sector </label>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="sector" id="sector" autocomplete="off">
+                    <input type="text" class="form-control" name="sector" id="sector" autocomplete="off" value="Cienfuegos">
                   </div>
                 </div>
                 <div class="col-12">
                   <label>Dirección </label>
                   <div class="form-group">
-                    <input type="text" class="form-control" name="direccion" id="direccion" autocomplete="off">
+                    <input type="text" class="form-control" name="direccion" id="direccion" autocomplete="off" value="Calle alegrio ">
                   </div>
                 </div>
-                <!-- <div class="col-12">
-                  <div class="form-check">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="form-check-input form-check-primary" checked name="estado" id="estado">
-                      <label class="form-check-label" for="estado">Activo</label>
-                    </div>
-                  </div>
-                </div> -->
+
 
 
                 <div class="col-6-lg col-xl-6 col-sm-12">
@@ -196,34 +189,22 @@
                   </div>
                 </div>
               </div>
-              <!-- <div class="row">
-                <div class="col-12">
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
-                      <i class="bx bx-x d-block d-sm-none"></i>
-                      <span class="d-none d-sm-block">Cerrar</span>
-                    </button>
-                    <button type="submit" class="btn btn-primary ml-1">
-                      <i class="bx bx-check d-block d-sm-none"></i>
-                      <span class="d-none d-sm-block">Guardar</span>
-                    </button>
-                  </div>
-                </div>
-              </div> -->
+
+            </div> -->
 
 
 
-            </div>
           </div>
         </div>
-        <div class="modal-footer justify-content-between">
-          <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-info">Save changes</button>
-        </div>
-      </form>
-
     </div>
+    <div class="modal-footer justify-content-between">
+      <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button>
+      <button type="submit" class="btn btn-info">Save changes</button>
+    </div>
+    </form>
+
   </div>
+</div>
 </div>
 
 

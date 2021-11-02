@@ -30,7 +30,7 @@ $unidad = ProductoController::getUnidad(null, null);
 
 <section class="content">
 
-  <div class="container-fluid">d
+  <div class="container-fluid">
     <div class="row">
       <div class="col-12">
         <!-- Default box -->
@@ -44,210 +44,234 @@ $unidad = ProductoController::getUnidad(null, null);
           <div class="card-body">
 
 
+            <form>
+              <div class="row">
 
+                <!-- ////////////////
+          VENDEDOR/COMPRADOR
+          ////////////////////// -->
+                <div class="col-md-2">
+                  <div class="form-group">
+                    <label>Comprador</label>
 
-
-
-
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">Productos</h3>
-
-                    <div class="card-tools">
-                      <div class="input-group input-group-sm" style="width: 350px;">
-                        <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
-
-                        <div class="input-group-append">
-                          <button type="submit" class="btn btn-default">
-                            <i class="fas fa-search"></i>
-                          </button>
-                        </div>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
                       </div>
+
+                      <input type="text" class="form-control" id="nuevoVendedor" name="nuevoVendedor" value="<?php echo $_SESSION["nombre"] ?>" readonly>
                     </div>
                   </div>
-                  <!-- /.card-header -->
-                  <div class="card-body table-responsive p-0" style="height: 120px;">
-                    <table id="producto" class="table table-bordered table-striped table-hover">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Condigo</th>
-                          <!-- <th>Nombre</th> -->
-                          <th>descripcion</th>
-                          <th>Precio</th>
-                          <!-- <th>Precio Venta</th> -->
-                          <th>Estado</th>
-                          <!-- <th>Acccion</th> -->
+                </div>
 
+                <!-- 
+            /////////////////////////
+              PROVEDOOR
+              //////////////////// -->
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Provedoor</label>
 
-                          <!-- <th>Telefono</th>
-                                    <th>Estado</th>
-                                    <th>Acción</th> -->
-                        </tr>
-                      </thead>
-                      <tbody>
+                    <div class="input-group">
+                      <select class="form-control" name="ciudad" id="ciudad">
+                        <option value='' disabled selected>Seleccione el Cliente</option>
                         <?php
-                        // print_r($producto);
-                        // echo "hola mundo" . $producto[0]['nombrePro'];
-                        // die;
-                        foreach ($producto as $index => $value) {
-                          $estado = null;
-                          // print_r($value);
-                          if ($value["estado"] == 'Activo') {
-                            $estado = "<span class='badge badge-primary'>" . $value["estado"] . "</span>";
-                          } else {
-                            $estado = "<span class='badge badge-danger'>" . $value["estado"] . "</span>";
-                          }
-                          echo '<tr>';
-                          echo '<td>' . ($index + 1) . '</td>';
-                          echo '<td>' . $value["codigoPro"] . '</td>';
+                        $cliente = ConsultasController::getDatos('contacto', 'esProveedor', true);
 
-                          // echo '<td>' . $value["nombrePro"] . '</td>';
-                          echo '<td>' . $value["descripcion"] . '</td>';
-                          echo '<td>' . $value["precioCompra"] . '</td>';
-                          // echo '<td>' . $value["precioVenta"] . '</td>';
-                          // echo '<td>' . $value["estado"] . '</td>';
-                          // echo '<td>' . $value["telefono"] . '</td>';
-                          echo '<td>' . $estado  . '</td>';
-                          // echo '<td>
-                          //               <div class="btn-group" role="group" aria-label="Basic example">
-                          //               <button type="button" class="btn btn-primary btn-editar" data-toggle="modal" data-target="#modalProducto" idProducto="' . $value["idProducto"] . '">Editar</button>
-                          //               <button type="button" class="btn btn-danger btn-eliminar"  idProducto="' . $value["idProducto"] . '">Eliminar</button>
-                          //           </div>
-                          //               </td>';
-                          echo '</tr>';
+                        foreach ($cliente as $index => $key) {
+                          echo "<option value='" . $key['idContacto'] . "'>" . $key['nombre'] . "</option>";
                         }
                         ?>
-                      </tbody>
-                    </table>
-
-
-
-
-
+                      </select>
+                      <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
+                          <i class="icon-database-add"></i> +
+                        </button></span>
+                    </div>
                   </div>
-                  <!-- /.card-body -->
+
 
                 </div>
-                <!-- /.card -->
+
+
+                <!-- /////////////////////////////
+            BUSCAR PRODUCTO
+          //////////////////////////////                   -->
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="consultaProducto">Producto</label>
+                    <div class="input-group">
+                      <select class="form-control select2" name="consultaProducto" id="consultaProducto">
+                        <option value='' disabled selected>Seleccione un Producto</option>
+                      </select>
+                      <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
+                          <i class="icon-database-add"></i> +
+                        </button></span>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+
+                <!-- 
+                <div class="col-md-3">
+           
+                  <div class="form-group">
+                    <label>Codigo de Barra</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" name="codigo" id="codigo" value="crack2" placeholder="Ingrese el codigo" autocomplete="off">
+                    </div>
+    
+                  </div>
+                </div> -->
+
+
+                <input type="hidden" name="idEmpleado" id="idEmpleado" value="0">
+                <div class="col-md-4">
+                  <!-- Date dd/mm/yyyy -->
+                  <div class="form-group">
+                    <label>Descripcion</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" value="crack2" placeholder="Ingrese el descripcion" autocomplete="off" disabled>
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <!-- Date dd/mm/yyyy -->
+                  <div class="form-group">
+                    <label>Cant</label>
+                    <div class="input-group">
+                      <input type="number" class="form-control" name="cantidad" id="cantidad" value="crack2" placeholder="Ingrese el cantidad" autocomplete="off">
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                </div>
+
+                <div class="col-md-2">
+                  <!-- Date dd/mm/yyyy -->
+                  <div class="form-group">
+                    <label>Precio</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" name="codigo" id="codigo" value="crack2" placeholder="Precio Compra" autocomplete="off" disabled>
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                </div>
+
+
+
+
+                <div class="col-md-2">
+                  <!-- Date dd/mm/yyyy -->
+                  <div class="form-group">
+                    <label>Sub Total</label>
+                    <div class="input-group">
+                      <input type="text" class="form-control" name="subTotal" id="subTotal" value="0.00" placeholder="Sub Total" autocomplete="off" disabled>
+                    </div>
+                    <!-- /.input group -->
+                  </div>
+                </div>
+
+
+
 
               </div>
 
 
-              <div class="col-md-4">
-                <!-- Date dd/mm/yyyy -->
-                <div class="form-group">
-                  <label>Codigo de Barra</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="codigo" id="codigo" value="crack2" placeholder="Ingrese el codigo" autocomplete="off">
-                  </div>
-                  <!-- /.input group -->
+              <!-- TABLA DE PRODUCTO -->
+              <div class="row">
+                <div class="card-body table-responsive p-0" style="height: 200px;">
+                  <table class="table table-light-fixed text-nowrap">
+                    <thead class="thead-dark">
+                      <tr scope="row">
+                        <th scope=" col">ID</th>
+                        <th scope=" col">Codigo</th>
+                        <th scope=" col">Descripcion</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">Sub Total</th>
+
+                        <th scope="col">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bodyProductos">
+                    </tbody>
+
+                  </table>
                 </div>
+                <!-- /.col -->
               </div>
 
 
+              <!-- TABLA DE TOTALES ETC -->
+              <div class="row">
+                <!-- accepted payments column -->
+                <!-- <div class="col-6">
+                  <p class="lead">Metodo De Pago:</p>
+                  <img src="views/assets/img/credit/visa.png" alt="Visa">
+                  <img src="views/assets/img/credit/mastercard.png" alt="Mastercard">
+                  <img src="views/assets/img/credit/american-express.png" alt="American Express">
+                  <img src="views/assets/img/credit/paypal2.png" alt="Paypal">
 
+                  <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
+                    plugg
+                    dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                  </p>
+                </div> -->
+                <!-- /.col -->
+                <div class="col-6">
 
-            </div>
+                  <div class="table-responsive">
+                    <!-- <div class="card card-info card-outline"></div> -->
 
+                    <div class="card-body">
+                      <p class="lead">Monto Adeudado 2/22/2014</p>
 
+                      <table class="table">
+                        <tbody id="bodyProductos">
+                          <tr>
+                            <th>Productos:</th>
 
+                            <td id="totalCantidad" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <tr>
+                            <th style="width:50%">Subtotal:</th>
 
+                            <td id="subTotal" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <tr>
+                            <th>Itbis 18%</th>
 
+                            <td id="totalItbis" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <th>Total:</th>
 
+                          <td id="totalImporte" align="center" colspan="2">0.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- </div> -->
 
-
-
-
-
-            <div class="row">
-              <input type="hidden" name="idEmpleado" id="idEmpleado" value="0">
-
-
-
-
-              <div class="col-md-4">
-                <!-- Date dd/mm/yyyy -->
-                <div class="form-group">
-                  <label>Descripcion</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" value="crack2" placeholder="Ingrese el descripcion" autocomplete="off" disabled>
                   </div>
-                  <!-- /.input group -->
                 </div>
+                <!-- /.col -->
+              </div>
+              <div class="modal-footer justify-content-between">
+                <!-- <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button> -->
+                <button type="submit" class="btn btn-info">Generar Compra</button>
               </div>
 
-              <div class="col-md-3">
-                <!-- Date dd/mm/yyyy -->
-                <div class="form-group">
-                  <label>Cantiadad</label>
-                  <div class="input-group">
-                    <input type="number" class="form-control" name="cantidad" id="cantidad" value="crack2" placeholder="Ingrese el cantidad" autocomplete="off">
-                  </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <!-- Date dd/mm/yyyy -->
-                <div class="form-group">
-                  <label>Precio Compra</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="codigo" id="codigo" value="crack2" placeholder="Precio Compra" autocomplete="off" disabled>
-                  </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
-
-
-
-
-
-
-
-
-
-
-              <div class="col-md-3">
-                <!-- Date dd/mm/yyyy -->
-                <div class="form-group">
-                  <label>Sub Total</label>
-                  <div class="input-group">
-                    <input type="text" class="form-control" name="apellido" id="apellido" value="crack2" placeholder="Sub Total" autocomplete="off">
-                  </div>
-                  <!-- /.input group -->
-                </div>
-              </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            </div>
           </div>
         </div>
+
       </div>
-      <div class="modal-footer justify-content-between">
-        <!-- <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button> -->
-        <button type="submit" class="btn btn-info">Save changes</button>
-      </div>
+
       </form>
 
 

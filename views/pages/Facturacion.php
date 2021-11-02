@@ -63,18 +63,25 @@ $producto = ProductoController::getProducto(null, null);
                       </div>
                     </div>
 
+
                     <div class="col-6-lg col-xl-6 col-sm-12">
                       <div class="form-group">
-                        <!-- <label for="estado">Estado</label> -->
-                        <select id="tipoVenta" class="form-control" name="tipoVenta" required>
-                          <option value="0" disabled selected>Seleccione Tipo Venta</option>
+                        <div class="input-group">
+                          <!-- <label for="estado">Estado</label> -->
+                          <select id="tipoVenta" class="form-control" name="tipoVenta" required>
+                            <option value="0" disabled selected>Seleccione Tipo Venta</option>
 
-                          <option value="contado">Contado</option>
-                          <option value="credito">Credito</option>
-                          <option value="compuesto">Compuesto</option>
-                        </select>
+                            <option value="contado">Contado</option>
+                            <option value="credito">Credito</option>
+                            <option value="compuesto">Compuesto</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
+
+
+
+
 
                     <div class="col-6-lg col-xl-6 col-sm-12">
                       <div class="form-group">
@@ -95,6 +102,13 @@ $producto = ProductoController::getProducto(null, null);
                         </div>
                       </div>
                     </div>
+
+
+
+
+
+
+
 
                     <div class="w-100"></div>
                     <div class="col-md-3 col-sm-12">
@@ -123,6 +137,91 @@ $producto = ProductoController::getProducto(null, null);
                       <button type="button" id="btnAgregarProducto" type="button" class="btn btn-primary">Agregar</button>
                     </div>
                   </div>
+
+
+
+
+
+                  <div class="row">
+                    <div class="card-body table-responsive p-0" style="height: 300px;">
+                      <table class="table table-head-fixed text-nowrap">
+                        <thead>
+                          <tr scope="row">
+                            <th scope=" col">Descripcion</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Itbis</th>
+                            <th scope="col">Importe</th>
+                            <th scope="col">Acción</th>
+                          </tr>
+                        </thead>
+                        <tbody id="bodyProductos">
+                        </tbody>
+
+                      </table>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                  <div class="row">
+                    <!-- accepted payments column -->
+                    <div class="col-6">
+                      <p class="lead">Metodo De Pago:</p>
+                      <img src="views/assets/img/credit/visa.png" alt="Visa">
+                      <img src="views/assets/img/credit/mastercard.png" alt="Mastercard">
+                      <img src="views/assets/img/credit/american-express.png" alt="American Express">
+                      <img src="views/assets/img/credit/paypal2.png" alt="Paypal">
+
+                      <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
+                        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
+                        plugg
+                        dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
+                      </p>
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-6">
+                      <p class="lead">Monto Adeudado 2/22/2014</p>
+
+                      <div class="table-responsive">
+                        <table class="table">
+                          <tbody id="bodyProductos">
+                            <tr>
+                              <th>Productos:</th>
+
+                              <td id="totalCantidad" align="center" colspan="2">0</td>
+                            </tr>
+                            <tr>
+                              <th style="width:50%">Subtotal:</th>
+
+                              <td id="subTotal" align="center" colspan="2">0</td>
+                            </tr>
+                            <tr>
+                              <th>Itbis 18%</th>
+
+                              <td id="totalItbis" align="center" colspan="2">0</td>
+                            </tr>
+                            <th>Total:</th>
+
+                            <td id="totalImporte" align="center" colspan="2">0</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <!-- /.col -->
+                  </div>
+
+
+
+
+
+
+
+
+
+
+                  <!-- 
+                ///////////////////////////// -->
                 </form>
               </div>
             </div>
@@ -135,92 +234,10 @@ $producto = ProductoController::getProducto(null, null);
   <!-- /.row -->
 
   <!-- Table row -->
-  <div class="row">
-    <div class="card-body table-responsive p-0" style="height: 300px;">
-      <table class="table table-head-fixed text-nowrap">
-        <thead>
-          <tr scope="row">
-            <th scope=" col">Descripcion</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Itbis</th>
-            <th scope="col">Importe</th>
-            <th scope="col">Acción</th>
-          </tr>
-        </thead>
-        <tbody id="bodyProductos">
-        </tbody>
-        <!-- <tfoot>
-          <tr>
-            <th>Productos:</th>
-   
-            <td id="totalCantidad" align="center" colspan="2">0</td>
-          </tr>
-          <tr>
-            <th style="width:50%">Subtotal:</th>
-      
-            <td id="subTotal" align="center" colspan="2">0</td>
-          </tr>
-          <tr>
-            <th>Itbis 18%</th>
-          
-            <td id="totalItbis" align="center" colspan="2">0</td>
-          </tr>
-          <th>Total:</th>
 
-          <td id="totalImporte" align="center" colspan="2">0</td>
-          </tr>
-        </tfoot> -->
-      </table>
-    </div>
-    <!-- /.col -->
-  </div>
-  <!-- /.row -->
-  <div class="row">
-    <!-- accepted payments column -->
-    <div class="col-6">
-      <p class="lead">Metodo De Pago:</p>
-      <img src="views/assets/img/credit/visa.png" alt="Visa">
-      <img src="views/assets/img/credit/mastercard.png" alt="Mastercard">
-      <img src="views/assets/img/credit/american-express.png" alt="American Express">
-      <img src="views/assets/img/credit/paypal2.png" alt="Paypal">
 
-      <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-        Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-        plugg
-        dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-      </p>
-    </div>
-    <!-- /.col -->
-    <div class="col-6">
-      <p class="lead">Monto Adeudado 2/22/2014</p>
 
-      <div class="table-responsive">
-        <table class="table">
-          <tr>
-            <th>Productos:</th>
 
-            <td id="totalCantidad" align="center" colspan="2">0</td>
-          </tr>
-          <tr>
-            <th style="width:50%">Subtotal:</th>
-
-            <td id="subTotal" align="center" colspan="2">0</td>
-          </tr>
-          <tr>
-            <th>Itbis 18%</th>
-
-            <td id="totalItbis" align="center" colspan="2">0</td>
-          </tr>
-          <th>Total:</th>
-
-          <td id="totalImporte" align="center" colspan="2">0</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-    <!-- /.col -->
-  </div>
 
 
 
@@ -241,6 +258,119 @@ $producto = ProductoController::getProducto(null, null);
     </div>
     <!-- /.col -->
   </div>
+
+
+
+
+  <!--Registro de pago form Modal -->
+  <div class="modal fade text-left" id="modalRegistroFactura" tabindex="-1" role="dialog" aria-labelledby="tituloModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="tituloModal">Agregar pago </h4>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <form id="formularioRegistrarFactura">
+            <div class="row">
+              <div class="col-md-12 col-lg-6">
+                <div class="row">
+                  <input type="hidden" name="idMarca" value="0" id="id">
+                  <div class="col-md-12 col-lg-6">
+                    <div class="form-group">
+                      <label>Total apagar</label>
+                      <input type="text" placeholder="Ingrese la cantidad" class="form-control" name="montoApagar" id="montoApagar" readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-12 col-lg-6">
+                    <div class="form-group">
+                      <label>Cantidad a devolver </label>
+                      <input type="number" class="form-control pagar" name="cantidadDevolver" id="cantidadDevolver" readonly>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label>Cantidad recibida </label>
+                      <input type="number" class="form-control pagar" name="pagoEfectivo" id="pagoEfectivo" min="0" placeholder="Efectivo" required>
+                    </div>
+                  </div>
+                  <div class="col-md-6 col-lg-6">
+                    <div class="form-group">
+                      <label>Credito </label>
+                      <input type="number" class="form-control pagar" name="credito" id="credito" min="0" placeholder="Monto en credito">
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label>Transferencia </label>
+                      <input type="number" class="form-control pagar" name="transferencia" id="transferencia" min="0" placeholder="Monto en transferencia">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-12 col-lg-6">
+                <ol class="list-group list-group-numbered">
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Productos totales</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill" id="cantidadProductoModal">0.00</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Impuesto total %18</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill" id="itbisTotalModal">0.00</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Descuento</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill">0.00</span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-start">
+                    <div class="ms-2 me-auto">
+                      <div class="fw-bold">Total</div>
+                    </div>
+                    <span class="badge bg-primary rounded-pill" id="totalModal">0.00</span>
+                  </li>
+                </ol>
+              </div>
+              <div class="col-12 mt-3">
+                <div class="mb-3">
+                  <textarea class="form-control" name="nota" id="nota" rows="3" placeholder="Notas"></textarea>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                    <i class="bx bx-x d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Cerrar</span>
+                  </button>
+                  <button type="submit" class="btn btn-primary ml-1" id="btnRegistrarPago" disabled>
+                    <i class="bx bx-check d-block d-sm-none"></i>
+                    <span class="d-none d-sm-block">Procesar</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- FIN REGISTRAR PAGO MODAL -->
+
+
+
+
+
+
+
   <!-- /.row -->
 
   <!-- this row will not appear when printing -->

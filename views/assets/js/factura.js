@@ -12,71 +12,71 @@ $(function () {
   //   }
   // });
 
-    //Busqueda select de los productos
-    $('.select2').select2({
-      theme: "bootstrap4",
-      placeholder: "Select a option",
-      minimumInputLength: 3,
-      ajax: {
-        url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
-        data: function (params) {
-          var query = {
-            buscar: params.term,
-            type: 'public'
-          }
-  
-          // Query parameters will be ?search=[term]&type=public
-          return query;
-        },
-        dataType: "json",
-        type: "GET",
-        // delay: 250,
-        processResults(data) {
-          console.log("data: ", data);
-          return {
-            results: $.map(data, function (item) {
-              return {
-                text: item.nombrePro + ' (' +item.codigoPro+')',
-                id: item.idProducto,
-                precio: item.precioVenta,
-                codigoPro: item.codigoPro
-              };
-            }),
-          };
-        },
-      },
-      templateResult: function (data) {
-        if (data.loading) {
-          return "Cargando";
+  //Busqueda select de los productos
+  $('.select2').select2({
+    theme: "bootstrap4",
+    placeholder: "Select a option",
+    minimumInputLength: 3,
+    ajax: {
+      url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
+      data: function (params) {
+        var query = {
+          buscar: params.term,
+          type: 'public'
         }
 
-        // $('#cantidad').focus().select();
-        $('#precio').val(data.precio);
-        console.log("data: ", data);
-        var $contenedor = $(`<option value='${data.id}'>${data.text + '-'}</option>`);
-        // const $contenedor = $(``);
-        return $contenedor;
+        // Query parameters will be ?search=[term]&type=public
+        return query;
       },
-      // templateSelection: function (dato) {
-      //   //Agrega el precio del producto al input del precio
-      //   $('#precio').val(dato.precio)
-      //   return dato.nombre ? `${dato.nombre} (${dato.categoria})` : "";
-      // },
-    });
-  
-    $('#btnAgregarProducto').click(function() {
-      const idProducto = $( "#consultaProducto").val();
+      dataType: "json",
+      type: "GET",
+      // delay: 250,
+      processResults(data) {
+        console.log("data: ", data);
+        return {
+          results: $.map(data, function (item) {
+            return {
+              text: item.nombrePro + ' (' + item.codigoPro + ')',
+              id: item.idProducto,
+              precio: item.precioVenta,
+              codigoPro: item.codigoPro
+            };
+          }),
+        };
+      },
+    },
+    templateResult: function (data) {
+      if (data.loading) {
+        return "Cargando";
+      }
 
-      //VERIFICAR SI EL PRODUCTO EXISTE EN LA TABLA
-      if($(`#bodyProductos tr[idProducto=${idProducto}]`).length === 0) {
-          const nombre = $( "#consultaProducto option:selected" ).text();
-          const cantidad = $( "#cantidad" ).val();
-          const precio = $( "#precio" ).val();
-          const itbis = Number((Number(cantidad) * Number(precio) ) * 0.18 ).toFixed(2);
-          const importe = Number((Number(cantidad) * Number(precio) ) + Number(itbis) ).toFixed(2);
-          // console.log('click');  
-          const html = 
-          `<tr idProducto=${idProducto}>
+      // $('#cantidad').focus().select();
+      $('#precio').val(data.precio);
+      console.log("data: ", data);
+      var $contenedor = $(`<option value='${data.id}'>${data.text + '-'}</option>`);
+      // const $contenedor = $(``);
+      return $contenedor;
+    },
+    // templateSelection: function (dato) {
+    //   //Agrega el precio del producto al input del precio
+    //   $('#precio').val(dato.precio)
+    //   return dato.nombre ? `${dato.nombre} (${dato.categoria})` : "";
+    // },
+  });
+
+  $('#btnAgregarProducto').click(function () {
+    const idProducto = $("#consultaProducto").val();
+
+    //VERIFICAR SI EL PRODUCTO EXISTE EN LA TABLA
+    if ($(`#bodyProductos tr[idProducto=${idProducto}]`).length === 0) {
+      const nombre = $("#consultaProducto option:selected").text();
+      const cantidad = $("#cantidad").val();
+      const precio = $("#precio").val();
+      const itbis = Number((Number(cantidad) * Number(precio)) * 0.18).toFixed(2);
+      const importe = Number((Number(cantidad) * Number(precio)) + Number(itbis)).toFixed(2);
+      // console.log('click');  
+      const html =
+        `<tr idProducto=${idProducto}>
             <td class='descripcion'>${nombre}</td>
             <td class='cantidad'>
               <input type='number' class='form-control cantidadTabla' style='width: auto' min='1' value='${cantidad}'>
@@ -94,874 +94,294 @@ $(function () {
               <button type="button" class="btn btn-danger btn-sm eliminar" id><i class="fa fa-trash"></i></button>
             </td>
           <tr>`;
-          $('#bodyProductos').append(html);
-      } else {
-        $(`#bodyProductos tr[idProducto=${idProducto}]`).each(function() {
-          const cantidad = Number($(this).find('input.cantidadTabla').val());  
+      $('#bodyProductos').append(html);
+    } else {
+      $(`#bodyProductos tr[idProducto=${idProducto}]`).each(function () {
+        const cantidad = Number($(this).find('input.cantidadTabla').val());
 
-          const precio = Number($(this).find('.precio').html());  
-  
-          
-          $(this).find('input.cantidad').val(Number(cantidad)+Number($('#cantidad').val()));
-          $(this).find('.importe').html(Number(precio) * Number(cantidad).toFixed(2));
-        });
+        const precio = Number($(this).find('.precio').html());
 
-        //Actualizar el producto que se intenta agregar
-        //Cantidad registrada actual
 
+        $(this).find('input.cantidad').val(Number(cantidad) + Number($('#cantidad').val()));
+        $(this).find('.importe').html(Number(precio) * Number(cantidad).toFixed(2));
+      });
+
+      //Actualizar el producto que se intenta agregar
+      //Cantidad registrada actual
+
+    }
+
+  });
+
+  $('#bodyProductos').on('change', '.cantidadTabla', function () {
+
+
+    console.log('input-cantidad', Number($(this).parent().parent().find('.precio').html()));
+    const precio = Number($(this).parent().parent().find('.precio').html());
+    const cantidad = Number($(this).parent().find('.cantidadTabla').val());
+
+    const subtotal = precio * cantidad;
+    const itbis = subtotal * 0.18;
+    const importe = subtotal + itbis;
+
+    $(this).parent().parent().find('.importe').html(importe.toFixed(2));
+    $(this).parent().parent().find('.itbis').html(itbis.toFixed(2));
+
+    console.log('input-cantidad');
+  });
+
+  $('#bodyProductos').on('click', '.eliminar', function () {
+    $(this).parent().parent().remove();
+  });
+
+
+
+  //  
+  const agregarProductoAfacturar = (producto) => {
+    if ($(`#bodyProductos tr[idProducto=${producto.idProducto}]`).length == 0) {
+      if ($("#btnFacturar").prop("disabled")) {
+        $("#btnFacturar").prop("disabled", false);
       }
+      $("#bodyProductos").append(`
+      <tr idProducto=${producto.idProducto} nombre=${producto.nombre
+        } precio=${producto.precio} urlImagen=${producto.urlImagen
+        } cantidad=${1}> 
+        <td>
+          <div class='d-flex align-items-center'>
+            <div class='avatar avatar-lg'>
+                <img src=${producto.urlImagen}>
+            </div>
+            <p class='font-bold ms-3 mb-0'>${producto.nombre}</p>
+          </div>
+        </td>
+        <td class="cantidad"><input type="number" class="form-control input-cantidad" value="1" min="1"/></td>
+        <td class="precio">${producto.precio}</td>
+        <td class="itbis">${(producto.precio * 0.18).toFixed(2)}</td>
+        <td class="importe">${(producto.precio * 1.18).toFixed(2)}</td>
+        <td class="eliminar">
+          <div class='btn-group btn-group-sm' role='group' aria-label='Acciones'>
+            <button type='button' class='btn btn-danger btn-eliminarProducto' idProducto='${producto.idProducto
+        }'><i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `);
+    } else {
+      //Cambiar el precio de las tablas
+      $(`#bodyProductos tr[idProducto=${producto.idProducto}]`).each(
+        function () {
+          // const precio = Number($(this).find(".precio").html());
+          const cantidad = Number($(this).find(".input-cantidad").val()) + 1;
+          const importe = Number(cantidad * producto.precio * 1.18).toFixed(2);
+          const itbis = Number(cantidad * producto.precio * 0.18).toFixed(2);
 
+          console.log("cantidad: ", $(this).find(".input-cantidad").val());
+
+          $(this).find(".input-cantidad").val(cantidad);
+          $(this).find(".importe").html(importe);
+          $(this).find(".itbis").html(itbis);
+          // console.log($(this).find('.cantidad').html())
+        }
+      );
+    }
+
+    //Recalculando cada vez que se modifique el arreglo de producto
+    calcularTotalDOM();
+  };
+
+
+
+
+
+  //Calcular el total de la compra para mostrarlo en el DOM
+  const calcularTotalDOM = () => {
+    let importe = 0;
+    let cantidad = 0;
+    let itbis = 0;
+    $("#bodyProductos")
+      .first()
+      .find("tr")
+      .each(function () {
+        // console.log('valor: ', $(this).find('.cantidad').html());
+        importe += Number($(this).find(".importe").html());
+        cantidad += Number($(this).find(".input-cantidad").val());
+        itbis += Number($(this).find(".itbis").html());
+      });
+
+
+
+    itbis = Number(itbis).toFixed(2);
+    importe = Number(importe).toFixed(2);
+
+    console.log("itbis: ", $(this).find(".itbis").html());
+    console.log("importe: ", $(this).find(".importe").html());
+
+    $("#totalCantidad").html(cantidad);
+    $("#totalItbis").html(itbis);
+    $("#totalImporte").html(Math.round(importe));
+  };
+
+
+
+
+
+  $("#facturacion").submit(function (event) {
+    event.preventDefault();
+
+    $("#modalRegistroFactura").modal("show");
+
+    //Precargar los filtros de los componentes
+    $("#tipoVenta").change();
+
+    setTimeout(() => $("#pagoEfectivo").focus().select(), 1000);
+
+    $("#itbisTotalModal").html($("#totalItbis").html());
+    $("#totalModal").html($("#totalImporte").html());
+    $("#cantidadProductoModal").html($("#totalCantidad").html());
+
+    $("#montoApagar").val($("#totalImporte").html());
+
+    console.log("Facturando...");
+  });
+
+
+
+
+
+
+  ///FACTURAR
+  $("#btnFacturar").click(function () { });
+
+  const formato = (n) => {
+    return Number(n).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      minimumFractionDigits: 2,
+    });
+  };
+
+  $(".pagar").change(function () {
+    let montoApagar = Number($("#totalImporte").html());
+    const valores =
+      Number($("#pagoEfectivo").val()) +
+      Number($("#credito").val()) +
+      Number($("#transferencia").val());
+    montoApagar = Math.round(montoApagar - valores);
+    $("#cantidadDevolver").val(valores > 0 ? Math.round(montoApagar) : 0);
+    console.log("montoApagar", montoApagar);
+
+    if (montoApagar == 0) {
+      //Inabilitar el boton de guardar
+      $("#btnRegistrarPago").prop("disabled", false);
+      $("#cantidadDevolver").removeClass("is-invalid");
+      $("#cantidadDevolver").addClass("is-valid");
+    } else {
+      $("#cantidadDevolver").removeClass("is-valid");
+      $("#cantidadDevolver").addClass("is-invalid");
+      $("#btnRegistrarPago").prop("disabled", true);
+    }
+  });
+
+  $("#tipoVenta").change(function () {
+    if ($(this).val() === "contado") {
+      $("#credito").prop("disabled", true);
+      $("#pagoEfectivo").prop("disabled", false);
+      $("#transferencia").prop("disabled", false);
+
+      $("#pagoEfectivo").val("");
+      $("#transferencia").val("");
+      $("#credito").val("");
+
+      //CARGAR EL TOTAL EN EL REGISTRO DE CONTADO
+      $("#pagoEfectivo")
+        .val(Number($("#totalImporte").html()))
+        .focus();
+    } else if ($(this).val() === "credito") {
+      $("#credito").prop("disabled", false).prop("readonly", true);
+      $("#pagoEfectivo").prop("disabled", true);
+      $("#transferencia").prop("disabled", true);
+
+      $("#pagoEfectivo").val("");
+      $("#transferencia").val("");
+
+      //CARGAR EL TOTAL EN EL REGISTRO DE CONTADO
+      $("#credito")
+        .val(Number($("#totalImporte").html()))
+        .focus();
+    } else if ($(this).val() === "compuesto") {
+      $("#pagoEfectivo").prop("disabled", false);
+      $("#credito").prop("disabled", false).prop("readonly", false);
+      $("#transferencia").prop("disabled", false);
+
+      $("#pagoEfectivo").val("");
+      $("#credito").val("");
+      $("#transferencia").val("");
+
+      $("#cantidadDevolver").val("0");
+    }
+
+    //ACTUALIZAR LOS INPUT DE LAS DEVOLUCIONES
+    $(".pagar").change();
+    // $('.pago').change();
+  });
+
+  $("#formularioRegistrarFactura").submit((e) => {
+    e.preventDefault();
+
+    // $("#modalRegistroFactura").modal("hide");
+    $("#modalFactura").modal("show");
+
+    const factura = {
+      tipoFactura: $('#tipoVenta').val(),
+      pagoEfectivo: Number($('#pagoEfectivo').val()),
+      pagoTransferencia: Number($('#transferencia').val()),
+      credito: Number($('#credito').val()),
+      nota: $('#nota').val(),
+      productos: []
+    };
+
+
+    //ITERAR SOBRE TODOS LOS PRODUCTOS AGREGADO AL CARRITO PARA FACTURAR
+    $("#bodyProductos tr").each(function () {
+
+      const idProducto = $(this).attr("idproducto");
+      $(this).find(".input-cantidad").val();
+
+      factura.productos.push({
+        idProducto: Number(idProducto),
+        cantidad: Number($(this).find(".input-cantidad").val()),
+        precio: Number($(this).find(".precio").html()),
+        itbis: Number($(this).find(".itbis").html()),
+      });
     });
 
-    $('#bodyProductos').on('change', '.cantidadTabla', function() {
+    console.log("cantidad: ", factura);
 
-
-      console.log('input-cantidad', Number($(this).parent().parent().find('.precio').html()));
-      const precio = Number($(this).parent().parent().find('.precio').html());
-      const cantidad = Number($(this).parent().find('.cantidadTabla').val());
-
-      const subtotal = precio * cantidad;
-      const itbis = subtotal * 0.18;
-      const importe = subtotal + itbis;
-
-      $(this).parent().parent().find('.importe').html(importe.toFixed(2));
-      $(this).parent().parent().find('.itbis').html(itbis.toFixed(2));
-
-      console.log('input-cantidad');
+    $.ajax({
+      type: "POST",
+      url: `index.php?c=Factura&m=registrar`,
+      data: { json_string: JSON.stringify(factura) },
+      beforeSend: function () {
+        // $("#btnRegistrarPago").attr("disabled", true);
+        // $("#formularioRegistrarFactura").css("opacity", ".5");
+      },
+      success: function (response) {
+        console.log("prueba: ", response);
+        if (response.success) {
+          Swal.fire("Bien!!", `${response.msg}!`, "success").then((result) => {
+            if (result.isConfirmed) {
+              location.reload();
+            }
+          });
+        } else {
+          Swal.fire("Error!", `${response.msg}!`, "error");
+        }
+        $("#registroUsuario").css("opacity", "");
+        $("#btnGuardar").removeAttr("disabled");
+      },
     });
-
-    $('#bodyProductos').on('click', '.eliminar', function() {
-      $(this).parent().parent().remove();
-    });
-//   $('.select2').select2({
-//     allowClear: true,
-//     minimumResultsForSearch: 1,
-//     ajax: {
-//       url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
-//       data: function (params) {
-//         var query = {
-//           buscar: params.term,
-//           type: 'public'
-//         }
-
-//         // Query parameters will be ?search=[term]&type=public
-//         return query;
-//       },
-//         processResults: function (data) {
-//             return {
-//                 results: data,
-//             };
-//         },
-//         dataType: 'json',
-//         cache: true,
-//     },
-//     escapeMarkup: function(m) {
-//         return m;
-//     },
-//     templateResult: function (result) {
-//         if (result.loading) return 'Loading...';
-//         return result.text + '<h6>' + result.codigoPro + ' ' + result.codigoPro + '</h6>';
-//       },
-// });
-
-  // $('.select2').select2({
-  //   theme: "bootstrap4",
-  //   placeholder: 'Seleccione un Producto',
-  //   minimunInputLength: 3,
-  //   ajax: {
-  //     url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
-  //     data: function (params) {
-  //       var query = {
-  //         buscar: params.term,
-  //         type: 'public'
-  //       }
-
-  //       // Query parameters will be ?search=[term]&type=public
-  //       return query;
-  //     },
-  //     processResults(data) {
-  //       console.log("data: ", data);
-  //       return {
-  //         results: data,
-  //       };
-  //     },
-  //     dataType: 'json',
-  //     cache: true,
-  //   },
-  //   escapeMarkup: function(m) {
-  //     return m;
-  //   },
-  //   templateResult: function (result) {
-  //     if (result.loading) return 'Loading...';
-  //     return result.text + '<h6>' + result.codigoPro + ' ' + result.codigoPro + '</h6>';
-  //     },
-  //   cache: true
-  // });
-
-
-
-
-
-
-
-  /*=============================================
-  CARGAR LA TABLA DINÁMICA DE VENTAS
-  =============================================*/
-
-  // $.ajax({
-
-  //   url: "ajax/datatable-ventas.ajax.php",
-  //   success: function (respuesta) {
-
-  //     console.log("respuesta", respuesta);
-
-  //   }
-
-  // })
-
-  // $('.tablaVentas').DataTable({
-  //   "ajax": "ajax/datatable-ventas.ajax.php",
-  //   "deferRender": true,
-  //   "retrieve": true,
-  //   "processing": true,
-  //   "language": {
-
-  //     "sProcessing": "Procesando...",
-  //     "sLengthMenu": "Mostrar _MENU_ registros",
-  //     "sZeroRecords": "No se encontraron resultados",
-  //     "sEmptyTable": "Ningún dato disponible en esta tabla",
-  //     "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_",
-  //     "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0",
-  //     "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-  //     "sInfoPostFix": "",
-  //     "sSearch": "Buscar:",
-  //     "sUrl": "",
-  //     "sInfoThousands": ",",
-  //     "sLoadingRecords": "Cargando...",
-  //     "oPaginate": {
-  //       "sFirst": "Primero",
-  //       "sLast": "Último",
-  //       "sNext": "Siguiente",
-  //       "sPrevious": "Anterior"
-  //     },
-  //     "oAria": {
-  //       "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
-  //       "sSortDescending": ": Activar para ordenar la columna de manera descendente"
-  //     }
-
-  //   }
-
-  // });
-
-  /*=============================================
-  AGREGANDO PRODUCTOS A LA VENTA DESDE LA TABLA
-  =============================================*/
-
-  //   $(".tablaVentas tbody").on("click", "button.agregarProducto", function () {
-
-  //     var idProducto = $(this).attr("idProducto");
-
-  //     $(this).removeClass("btn-primary agregarProducto");
-
-  //     $(this).addClass("btn-default");
-
-  //     var datos = new FormData();
-  //     datos.append("idProducto", idProducto);
-
-  //     $.ajax({
-
-  //       url: "ajax/productos.ajax.php",
-  //       method: "POST",
-  //       data: datos,
-  //       cache: false,
-  //       contentType: false,
-  //       processData: false,
-  //       dataType: "json",
-  //       success: function (respuesta) {
-
-  //         var descripcion = respuesta["descripcion"];
-  //         var stock = respuesta["stock"];
-  //         var precio = respuesta["precio_venta"];
-
-  //         /*=============================================
-  //         EVITAR AGREGAR PRODUTO CUANDO EL STOCK ESTÁ EN CERO
-  //         =============================================*/
-
-  //         if (stock == 0) {
-
-  //           swal({
-  //             title: "No hay stock disponible",
-  //             type: "error",
-  //             confirmButtonText: "¡Cerrar!"
-  //           });
-
-  //           $("button[idProducto='" + idProducto + "']").addClass("btn-primary agregarProducto");
-
-  //           return;
-
-  //         }
-
-  //         $(".nuevoProducto").append(
-
-  //           '<div class="row" style="padding:5px 15px">' +
-
-  //           '<!-- Descripción del producto -->' +
-
-  //           '<div class="col-xs-6" style="padding-right:0px">' +
-
-  //           '<div class="input-group">' +
-
-  //           '<span class="input-group-addon"><button type="button" class="btn btn-danger btn-xs quitarProducto" idProducto="' + idProducto + '"><i class="fa fa-times"></i></button></span>' +
-
-  //           '<input type="text" class="form-control nuevaDescripcionProducto" idProducto="' + idProducto + '" name="agregarProducto" value="' + descripcion + '" readonly required>' +
-
-  //           '</div>' +
-
-  //           '</div>' +
-
-  //           '<!-- Cantidad del producto -->' +
-
-  //           '<div class="col-xs-3">' +
-
-  //           '<input type="number" class="form-control nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" value="1" stock="' + stock + '" nuevoStock="' + Number(stock - 1) + '" required>' +
-
-  //           '</div>' +
-
-  //           '<!-- Precio del producto -->' +
-
-  //           '<div class="col-xs-3 ingresoPrecio" style="padding-left:0px">' +
-
-  //           '<div class="input-group">' +
-
-  //           '<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>' +
-
-  //           '<input type="text" class="form-control nuevoPrecioProducto" precioReal="' + precio + '" name="nuevoPrecioProducto" value="' + precio + '" readonly required>' +
-
-  //           '</div>' +
-
-  //           '</div>' +
-
-  //           '</div>')
-
-  //         // SUMAR TOTAL DE PRECIOS
-
-  //         sumarTotalPrecios()
-
-  //         // AGREGAR IMPUESTO
-
-  //         agregarImpuesto()
-
-  //         // AGRUPAR PRODUCTOS EN FORMATO JSON
-
-  //         listarProductos()
-
-  //         // PONER FORMATO AL PRECIO DE LOS PRODUCTOS
-
-  //         $(".nuevoPrecioProducto").number(true, 2);
-
-  //       }
-
-  //     })
-
-  //   });
-
-  //   /*=============================================
-  //   CUANDO CARGUE LA TABLA CADA VEZ QUE NAVEGUE EN ELLA
-  //   =============================================*/
-
-  //   $(".tablaVentas").on("draw.dt", function () {
-
-  //     if (localStorage.getItem("quitarProducto") != null) {
-
-  //       var listaIdProductos = JSON.parse(localStorage.getItem("quitarProducto"));
-
-  //       for (var i = 0; i < listaIdProductos.length; i++) {
-
-  //         $("button.recuperarBoton[idProducto='" + listaIdProductos[i]["idProducto"] + "']").removeClass('btn-default');
-  //         $("button.recuperarBoton[idProducto='" + listaIdProductos[i]["idProducto"] + "']").addClass('btn-primary agregarProducto');
-
-  //       }
-
-
-  //     }
-
-
-  //   })
-
-
-  //   /*=============================================
-  //   QUITAR PRODUCTOS DE LA VENTA Y RECUPERAR BOTÓN
-  //   =============================================*/
-
-  //   var idQuitarProducto = [];
-
-  //   localStorage.removeItem("quitarProducto");
-
-  //   $(".formularioVenta").on("click", "button.quitarProducto", function () {
-
-  //     $(this).parent().parent().parent().parent().remove();
-
-  //     var idProducto = $(this).attr("idProducto");
-
-  //     /*=============================================
-  //     ALMACENAR EN EL LOCALSTORAGE EL ID DEL PRODUCTO A QUITAR
-  //     =============================================*/
-
-  //     if (localStorage.getItem("quitarProducto") == null) {
-
-  //       idQuitarProducto = [];
-
-  //     } else {
-
-  //       idQuitarProducto.concat(localStorage.getItem("quitarProducto"))
-
-  //     }
-
-  //     idQuitarProducto.push({ "idProducto": idProducto });
-
-  //     localStorage.setItem("quitarProducto", JSON.stringify(idQuitarProducto));
-
-  //     $("button.recuperarBoton[idProducto='" + idProducto + "']").removeClass('btn-default');
-
-  //     $("button.recuperarBoton[idProducto='" + idProducto + "']").addClass('btn-primary agregarProducto');
-
-  //     if ($(".nuevoProducto").children().length == 0) {
-
-  //       $("#nuevoImpuestoVenta").val(0);
-  //       $("#nuevoTotalVenta").val(0);
-  //       $("#totalVenta").val(0);
-  //       $("#nuevoTotalVenta").attr("total", 0);
-
-  //     } else {
-
-  //       // SUMAR TOTAL DE PRECIOS
-
-  //       sumarTotalPrecios()
-
-  //       // AGREGAR IMPUESTO
-
-  //       agregarImpuesto()
-
-  //       // AGRUPAR PRODUCTOS EN FORMATO JSON
-
-  //       listarProductos()
-
-  //     }
-
-  //   })
-
-  //   /*=============================================
-  //   AGREGANDO PRODUCTOS DESDE EL BOTÓN PARA DISPOSITIVOS
-  //   =============================================*/
-
-  //   var numProducto = 0;
-
-  //   $(".btnAgregarProducto").click(function () {
-
-  //     numProducto++;
-
-  //     var datos = new FormData();
-  //     datos.append("traerProductos", "ok");
-
-  //     $.ajax({
-
-  //       url: "ajax/productos.ajax.php",
-  //       method: "POST",
-  //       data: datos,
-  //       cache: false,
-  //       contentType: false,
-  //       processData: false,
-  //       dataType: "json",
-  //       success: function (respuesta) {
-
-  //         $(".nuevoProducto").append(
-
-  //           '<div class="row" style="padding:5px 15px">' +
-
-  //           '<!-- Descripción del producto -->' +
-
-  //           '<div class="col-xs-6" style="padding-right:0px">' +
-
-  //           '<div class="input-group">' +
-
-  //           '<span class="input-group-addon"><button type="button" class="btn btn-danger btn-xs quitarProducto" idProducto><i class="fa fa-times"></i></button></span>' +
-
-  //           '<select class="form-control nuevaDescripcionProducto" id="producto' + numProducto + '" idProducto name="nuevaDescripcionProducto" required>' +
-
-  //           '<option>Seleccione el producto</option>' +
-
-  //           '</select>' +
-
-  //           '</div>' +
-
-  //           '</div>' +
-
-  //           '<!-- Cantidad del producto -->' +
-
-  //           '<div class="col-xs-3 ingresoCantidad">' +
-
-  //           '<input type="number" class="form-control nuevaCantidadProducto" name="nuevaCantidadProducto" min="1" value="1" stock nuevoStock required>' +
-
-  //           '</div>' +
-
-  //           '<!-- Precio del producto -->' +
-
-  //           '<div class="col-xs-3 ingresoPrecio" style="padding-left:0px">' +
-
-  //           '<div class="input-group">' +
-
-  //           '<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>' +
-
-  //           '<input type="text" class="form-control nuevoPrecioProducto" precioReal="" name="nuevoPrecioProducto" readonly required>' +
-
-  //           '</div>' +
-
-  //           '</div>' +
-
-  //           '</div>');
-
-
-  //         // AGREGAR LOS PRODUCTOS AL SELECT 
-
-  //         respuesta.forEach(funcionForEach);
-
-  //         function funcionForEach(item, index) {
-
-  //           if (item.stock != 0) {
-
-  //             $("#producto" + numProducto).append(
-
-  //               '<option idProducto="' + item.id + '" value="' + item.descripcion + '">' + item.descripcion + '</option>'
-  //             )
-
-  //           }
-
-  //         }
-
-  //         // SUMAR TOTAL DE PRECIOS
-
-  //         sumarTotalPrecios()
-
-  //         // AGREGAR IMPUESTO
-
-  //         agregarImpuesto()
-
-  //         // PONER FORMATO AL PRECIO DE LOS PRODUCTOS
-
-  //         $(".nuevoPrecioProducto").number(true, 2);
-
-  //       }
-
-
-  //     })
-
-  //   })
-
-  //   /*=============================================
-  //   SELECCIONAR PRODUCTO
-  //   =============================================*/
-
-  //   $(".formularioVenta").on("change", "select.nuevaDescripcionProducto", function () {
-
-  //     var nombreProducto = $(this).val();
-
-  //     var nuevaDescripcionProducto = $(this).parent().parent().parent().children().children().children(".nuevaDescripcionProducto");
-
-  //     var nuevoPrecioProducto = $(this).parent().parent().parent().children(".ingresoPrecio").children().children(".nuevoPrecioProducto");
-
-  //     var nuevaCantidadProducto = $(this).parent().parent().parent().children(".ingresoCantidad").children(".nuevaCantidadProducto");
-
-  //     var datos = new FormData();
-  //     datos.append("nombreProducto", nombreProducto);
-
-
-  //     $.ajax({
-
-  //       url: "ajax/productos.ajax.php",
-  //       method: "POST",
-  //       data: datos,
-  //       cache: false,
-  //       contentType: false,
-  //       processData: false,
-  //       dataType: "json",
-  //       success: function (respuesta) {
-
-  //         $(nuevaDescripcionProducto).attr("idProducto", respuesta["id"]);
-  //         $(nuevaCantidadProducto).attr("stock", respuesta["stock"]);
-  //         $(nuevaCantidadProducto).attr("nuevoStock", Number(respuesta["stock"]) - 1);
-  //         $(nuevoPrecioProducto).val(respuesta["precio_venta"]);
-  //         $(nuevoPrecioProducto).attr("precioReal", respuesta["precio_venta"]);
-
-  //         // AGRUPAR PRODUCTOS EN FORMATO JSON
-
-  //         listarProductos()
-
-  //       }
-
-  //     })
-  //   })
-
-  //   /*=============================================
-  //   MODIFICAR LA CANTIDAD
-  //   =============================================*/
-
-  //   $(".formularioVenta").on("change", "input.nuevaCantidadProducto", function () {
-
-  //     var precio = $(this).parent().parent().children(".ingresoPrecio").children().children(".nuevoPrecioProducto");
-
-  //     var precioFinal = $(this).val() * precio.attr("precioReal");
-
-  //     precio.val(precioFinal);
-
-  //     var nuevoStock = Number($(this).attr("stock")) - $(this).val();
-
-  //     $(this).attr("nuevoStock", nuevoStock);
-
-  //     if (Number($(this).val()) > Number($(this).attr("stock"))) {
-
-  //       /*=============================================
-  //       SI LA CANTIDAD ES SUPERIOR AL STOCK REGRESAR VALORES INICIALES
-  //       =============================================*/
-
-  //       $(this).val(1);
-
-  //       var precioFinal = $(this).val() * precio.attr("precioReal");
-
-  //       precio.val(precioFinal);
-
-  //       sumarTotalPrecios();
-
-  //       swal({
-  //         title: "La cantidad supera el Stock",
-  //         text: "¡Sólo hay " + $(this).attr("stock") + " unidades!",
-  //         type: "error",
-  //         confirmButtonText: "¡Cerrar!"
-  //       });
-
-  //       return;
-
-  //     }
-
-  //     // SUMAR TOTAL DE PRECIOS
-
-  //     sumarTotalPrecios()
-
-  //     // AGREGAR IMPUESTO
-
-  //     agregarImpuesto()
-
-  //     // AGRUPAR PRODUCTOS EN FORMATO JSON
-
-  //     listarProductos()
-
-  //   })
-
-  //   /*=============================================
-  //   SUMAR TODOS LOS PRECIOS
-  //   =============================================*/
-
-  //   function sumarTotalPrecios() {
-
-  //     var precioItem = $(".nuevoPrecioProducto");
-  //     var arraySumaPrecio = [];
-
-  //     for (var i = 0; i < precioItem.length; i++) {
-
-  //       arraySumaPrecio.push(Number($(precioItem[i]).val()));
-
-  //     }
-
-  //     function sumaArrayPrecios(total, numero) {
-
-  //       return total + numero;
-
-  //     }
-
-  //     var sumaTotalPrecio = arraySumaPrecio.reduce(sumaArrayPrecios);
-
-  //     $("#nuevoTotalVenta").val(sumaTotalPrecio);
-  //     $("#totalVenta").val(sumaTotalPrecio);
-  //     $("#nuevoTotalVenta").attr("total", sumaTotalPrecio);
-
-
-  //   }
-
-  //   /*=============================================
-  //   FUNCIÓN AGREGAR IMPUESTO
-  //   =============================================*/
-
-  //   function agregarImpuesto() {
-
-  //     var impuesto = $("#nuevoImpuestoVenta").val();
-  //     var precioTotal = $("#nuevoTotalVenta").attr("total");
-
-  //     var precioImpuesto = Number(precioTotal * impuesto / 100);
-
-  //     var totalConImpuesto = Number(precioImpuesto) + Number(precioTotal);
-
-  //     $("#nuevoTotalVenta").val(totalConImpuesto);
-
-  //     $("#totalVenta").val(totalConImpuesto);
-
-  //     $("#nuevoPrecioImpuesto").val(precioImpuesto);
-
-  //     $("#nuevoPrecioNeto").val(precioTotal);
-
-  //   }
-
-  //   /*=============================================
-  //   CUANDO CAMBIA EL IMPUESTO
-  //   =============================================*/
-
-  //   $("#nuevoImpuestoVenta").change(function () {
-
-  //     agregarImpuesto();
-
-  //   });
-
-  //   /*=============================================
-  //   FORMATO AL PRECIO FINAL
-  //   =============================================*/
-
-  //   $("#nuevoTotalVenta").number(true, 2);
-
-  //   /*=============================================
-  //   SELECCIONAR MÉTODO DE PAGO
-  //   =============================================*/
-
-  //   $("#nuevoMetodoPago").change(function () {
-
-  //     var metodo = $(this).val();
-
-  //     if (metodo == "Efectivo") {
-
-  //       $(this).parent().parent().removeClass("col-xs-6");
-
-  //       $(this).parent().parent().addClass("col-xs-4");
-
-  //       $(this).parent().parent().parent().children(".cajasMetodoPago").html(
-
-  //         '<div class="col-xs-4">' +
-
-  //         '<div class="input-group">' +
-
-  //         '<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>' +
-
-  //         '<input type="text" class="form-control" id="nuevoValorEfectivo" placeholder="000000" required>' +
-
-  //         '</div>' +
-
-  //         '</div>' +
-
-  //         '<div class="col-xs-4" id="capturarCambioEfectivo" style="padding-left:0px">' +
-
-  //         '<div class="input-group">' +
-
-  //         '<span class="input-group-addon"><i class="ion ion-social-usd"></i></span>' +
-
-  //         '<input type="text" class="form-control" id="nuevoCambioEfectivo" placeholder="000000" readonly required>' +
-
-  //         '</div>' +
-
-  //         '</div>'
-
-  //       )
-
-  //       // Agregar formato al precio
-
-  //       $('#nuevoValorEfectivo').number(true, 2);
-  //       $('#nuevoCambioEfectivo').number(true, 2);
-
-
-  //       // Listar método en la entrada
-  //       listarMetodos()
-
-  //     } else {
-
-  //       $(this).parent().parent().removeClass('col-xs-4');
-
-  //       $(this).parent().parent().addClass('col-xs-6');
-
-  //       $(this).parent().parent().parent().children('.cajasMetodoPago').html(
-
-  //         '<div class="col-xs-6" style="padding-left:0px">' +
-
-  //         '<div class="input-group">' +
-
-  //         '<input type="number" min="0" class="form-control" id="nuevoCodigoTransaccion" placeholder="Código transacción"  required>' +
-
-  //         '<span class="input-group-addon"><i class="fa fa-lock"></i></span>' +
-
-  //         '</div>' +
-
-  //         '</div>')
-
-  //     }
-
-
-
-  //   })
-
-  //   /*=============================================
-  //   CAMBIO EN EFECTIVO
-  //   =============================================*/
-  //   $(".formularioVenta").on("change", "input#nuevoValorEfectivo", function () {
-
-  //     var efectivo = $(this).val();
-
-  //     var cambio = Number(efectivo) - Number($('#nuevoTotalVenta').val());
-
-  //     var nuevoCambioEfectivo = $(this).parent().parent().parent().children('#capturarCambioEfectivo').children().children('#nuevoCambioEfectivo');
-
-  //     nuevoCambioEfectivo.val(cambio);
-
-  //   })
-
-  //   /*=============================================
-  //   CAMBIO TRANSACCIÓN
-  //   =============================================*/
-  //   $(".formularioVenta").on("change", "input#nuevoCodigoTransaccion", function () {
-
-  //     // Listar método en la entrada
-  //     listarMetodos()
-
-
-  //   })
-
-
-  //   /*=============================================
-  //   LISTAR TODOS LOS PRODUCTOS
-  //   =============================================*/
-
-  //   function listarProductos() {
-
-  //     var listaProductos = [];
-
-  //     var descripcion = $(".nuevaDescripcionProducto");
-
-  //     var cantidad = $(".nuevaCantidadProducto");
-
-  //     var precio = $(".nuevoPrecioProducto");
-
-  //     for (var i = 0; i < descripcion.length; i++) {
-
-  //       listaProductos.push({
-  //         "id": $(descripcion[i]).attr("idProducto"),
-  //         "descripcion": $(descripcion[i]).val(),
-  //         "cantidad": $(cantidad[i]).val(),
-  //         "stock": $(cantidad[i]).attr("nuevoStock"),
-  //         "precio": $(precio[i]).attr("precioReal"),
-  //         "total": $(precio[i]).val()
-  //       })
-
-  //     }
-
-  //     $("#listaProductos").val(JSON.stringify(listaProductos));
-
-  //   }
-
-  //   /*=============================================
-  //   LISTAR MÉTODO DE PAGO
-  //   =============================================*/
-
-  //   function listarMetodos() {
-
-  //     var listaMetodos = "";
-
-  //     if ($("#nuevoMetodoPago").val() == "Efectivo") {
-
-  //       $("#listaMetodoPago").val("Efectivo");
-
-  //     } else {
-
-  //       $("#listaMetodoPago").val($("#nuevoMetodoPago").val() + "-" + $("#nuevoCodigoTransaccion").val());
-
-  //     }
-
-  //   }
-
-  //   /*=============================================
-  //   BOTON EDITAR VENTA
-  //   =============================================*/
-  //   $(".tablas").on("click", ".btnEditarVenta", function () {
-
-  //     var idVenta = $(this).attr("idVenta");
-
-  //     window.location = "index.php?ruta=editar-venta&idVenta=" + idVenta;
-
-
-  //   })
-
-  //   /*=============================================
-  //   FUNCIÓN PARA DESACTIVAR LOS BOTONES AGREGAR CUANDO EL PRODUCTO YA HABÍA SIDO SELECCIONADO EN LA CARPETA
-  //   =============================================*/
-
-  //   function quitarAgregarProducto() {
-
-  //     //Capturamos todos los id de productos que fueron elegidos en la venta
-  //     var idProductos = $(".quitarProducto");
-
-  //     //Capturamos todos los botones de agregar que aparecen en la tabla
-  //     var botonesTabla = $(".tablaVentas tbody button.agregarProducto");
-
-  //     //Recorremos en un ciclo para obtener los diferentes idProductos que fueron agregados a la venta
-  //     for (var i = 0; i < idProductos.length; i++) {
-
-  //       //Capturamos los Id de los productos agregados a la venta
-  //       var boton = $(idProductos[i]).attr("idProducto");
-
-  //       //Hacemos un recorrido por la tabla que aparece para desactivar los botones de agregar
-  //       for (var j = 0; j < botonesTabla.length; j++) {
-
-  //         if ($(botonesTabla[j]).attr("idProducto") == boton) {
-
-  //           $(botonesTabla[j]).removeClass("btn-primary agregarProducto");
-  //           $(botonesTabla[j]).addClass("btn-default");
-
-  //         }
-  //       }
-
-  //     }
-
-  //   }
-
-  //   /*=============================================
-  //   CADA VEZ QUE CARGUE LA TABLA CUANDO NAVEGAMOS EN ELLA EJECUTAR LA FUNCIÓN:
-  //   =============================================*/
-
-  //   $('.tablaVentas').on('draw.dt', function () {
-
-  //     quitarAgregarProducto();
-
-  //   })
-
-
-
-  //   /*=============================================
-  //   BORRAR VENTA
-  //   =============================================*/
-  //   $(".tablas").on("click", ".btnEliminarVenta", function () {
-
-  //     var idVenta = $(this).attr("idVenta");
-
-  //     swal({
-  //       title: '¿Está seguro de borrar la venta?',
-  //       text: "¡Si no lo está puede cancelar la accíón!",
-  //       type: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonColor: '#3085d6',
-  //       cancelButtonColor: '#d33',
-  //       cancelButtonText: 'Cancelar',
-  //       confirmButtonText: 'Si, borrar venta!'
-  //     }).then(function (result) {
-  //       if (result.value) {
-
-  //         window.location = "index.php?ruta=ventas&idVenta=" + idVenta;
-  //       }
-
-  //     })
-
-  //   })
+  });
 
 
 

@@ -188,7 +188,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/ventas_crack/index.php?route=administracionProductos" <?php if ($_GET['route'] == "facturacion") { ?> class="nav-link active" <?php } else { ?> class="nav-link" <?php } ?>>
+                                    <a href="/ventas_crack/index.php?route=adminCompra" <?php if ($_GET['route'] == "facturacion") { ?> class="nav-link active" <?php } else { ?> class="nav-link" <?php } ?>>
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Compra</p>
                                     </a>
