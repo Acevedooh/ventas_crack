@@ -2,9 +2,53 @@
 
 require_once "Conection.php";
 
-
 class FacturaModel
 {
+
+  static public function getFactura($numFactura)
+  {
+    // echo $numFactura;
+
+    $data = Conection::connect()->prepare(
+      "SELECT 
+              f.idFactura,
+              f.NCF,
+              f.contado,
+              f.credito,
+              f.fecha,
+              c.nombre AS cliente,
+              COALESCE(t.descripcion,' - ') AS telefono,
+              COALESCE(cr.descripcion,' - ') AS correo,
+              ci.descripcion AS ciudad,
+              d.sector,
+              d.direccion,
+              f.montoContado,
+              f.montoTransferencia,
+              f.montoCredito,
+              p.idProducto,
+              p.codigo,
+              p.nombre,
+              fd.cantidad,
+              fd.precio,
+              fd.itbis,
+              ROUND((fd.cantidad * fd.precio)+fd.itbis,2) AS importe
+            FROM factura f
+            INNER JOIN contacto c ON f.idCliente = c.idContacto
+            INNER JOIN factura_detalle fd ON fd.idFactura = f.idFactura
+            INNER JOIN producto p ON fd.idProducto = p.idProducto
+            LEFT JOIN tercero_telefono tt ON tt.idTercero = c.idTercero
+            LEFT JOIN telefono t ON t.idTelefono = tt.idTelefono
+            LEFT JOIN tercero_correo tc ON tc.idTercero = c.idTercero
+            LEFT JOIN correo cr ON tc.idCorreo = cr.idCorreo
+            LEFT JOIN direccion d ON d.idTercero = c.idTercero
+            LEFT JOIN ciudad ci ON d.idCiudad = ci.idCiudad
+          WHERE f.idFactura = :numFactura"
+    );
+    $data->bindParam(":numFactura", $numFactura, PDO::PARAM_INT);
+    $data->execute();
+    return $data->fetchAll();
+  }
+
   static public function getInventarios()
   {
     $data = Conection::connect()->prepare(
@@ -35,43 +79,58 @@ class FacturaModel
 
     $stm = Conection::connect();
     $stm->beginTransaction();
-    $idInventario = 0;
     try {
 
-      $dbh = $stm->prepare("INSERT INTO tercero VALUES()");
-      $dbh->execute();
-      $idTercero = $stm->lastInsertId();
+      $contado = $data['pagoEfectivo'] > 0 ? TRUE : FALSE;
+      $credito = $data['credito'] > 0 ? TRUE : FALSE;
 
-      if (strlen(trim($data['provincia'])) || strlen(trim($data['ciudad'])) > 0 || strlen(trim($data['sector'])) > 0 || strlen(trim($data['direccion'])) > 0) {
-
-        $dbh = $stm->prepare("INSERT INTO direccion(idTercero, idProvincia, idCiudad, sector, direccion)
-          VALUES(:idTercero, :provincia, :ciudad, :sector, :direccion)");
-        $dbh->bindParam(":idTercero", $idTercero, PDO::PARAM_INT);
-        $dbh->bindParam(":provincia", $data['provincia'], PDO::PARAM_INT);
-        $dbh->bindParam(":ciudad", $data['ciudad'], PDO::PARAM_INT);
-        $dbh->bindParam(":sector", $data['sector'], PDO::PARAM_STR);
-        $dbh->bindParam(":direccion", $data['direccion'], PDO::PARAM_STR);
-        $dbh->execute();
-      }
-
-
-      $dbh = $stm->prepare("INSERT INTO almacen(idTercero, descripcion, creado_por, activo) VALUES(:idTercero, :descripcion, :creado_por, :estado)");
-      $dbh->bindParam(":idTercero", $idTercero, PDO::PARAM_STR);
-      $dbh->bindParam(":descripcion", $data['nombre'], PDO::PARAM_STR);
+      $dbh = $stm->prepare("INSERT INTO factura(NCF, contado, credito, idCliente, montoContado, montoTransferencia, montoCredito, nota, creado_por) 
+                VALUES(:NCF, :contado, :credito, :idCliente, :montoContado, :montoTransferencia, :montoCredito, :nota, :creado_por)");
+      $dbh->bindParam(":NCF", $data['cliente'], PDO::PARAM_STR);
+      $dbh->bindParam(":contado", $contado, PDO::PARAM_BOOL);
+      $dbh->bindParam(":credito", $credito, PDO::PARAM_BOOL);
+      $dbh->bindParam(":idCliente", $data['cliente'], PDO::PARAM_INT);
+      $dbh->bindParam(":montoContado", $data['pagoEfectivo'], PDO::PARAM_INT);
+      $dbh->bindParam(":montoTransferencia", $data['pagoTransferencia'], PDO::PARAM_INT);
+      $dbh->bindParam(":montoCredito", $data['credito'], PDO::PARAM_INT);
+      $dbh->bindParam(":nota", $data['nota'], PDO::PARAM_STR);
       $dbh->bindParam(":creado_por", $data['creado_por'], PDO::PARAM_INT);
-      $dbh->bindParam(":estado", $data['estado'], PDO::PARAM_BOOL);
       $dbh->execute();
-      $idInventario = $stm->lastInsertId();
+      $idFactura = $stm->lastInsertId();
+
+      foreach ($data['productos'] as $key) {
+        // print_r($key);
+        $dbh = $stm->prepare("INSERT INTO factura_detalle(idFactura, idProducto, cantidad, precio, itbis) 
+                        SELECT 
+                          :idFactura,
+                          :idProducto1,
+                          :cantidad,
+                          (SELECT pp.precioVenta 
+                          FROM precio_producto pp WHERE pp.idProducto = p.idProducto 
+                          ORDER BY pp.fecha DESC LIMIT 1 ) AS precioVenta,
+                          :itbis
+                        FROM producto p WHERE p.idProducto = :idProducto2");
+
+        $cantidad = number_format($key->cantidad, 2);
+        $itbis = number_format($key->itbis, 2);
+        $dbh->bindParam(":idFactura", $idFactura, PDO::PARAM_INT);
+        $dbh->bindParam(":idProducto1", $key->idProducto, PDO::PARAM_INT);
+        $dbh->bindParam(":idProducto2", $key->idProducto, PDO::PARAM_INT);
+        $dbh->bindParam(":cantidad", $cantidad, PDO::PARAM_STR);
+        $dbh->bindParam(":itbis", $itbis, PDO::PARAM_STR);
+        $dbh->execute();
+        // $idFactura = $stm->lastInsertId();
+      }
 
       $stm->commit();
 
-      return $idInventario;
+      return array("numFactura" => $idFactura, "success" => true, "msg" => "Se ha registrado de forma correacta");
     } catch (PDOException $ex) {
       $stm->rollBack();
       print "Error!!" . $ex->getMessage();
-      return 0;
+      return array("numFactura" => 0, "success" => false, "msg" => "Ah ocurrido un error interno");
     }
-    return 0;
+    return array("numFactura" => 0, "success" => false, "msg" => "Ah ocurrido un error interno");
   }
 
   static public function eliminar($idUnidad)

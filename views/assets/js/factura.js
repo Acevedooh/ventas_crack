@@ -231,7 +231,8 @@ $(function () {
     //Verficar si existe producto en la tabla
     if ($('#bodyProductos tr').length > 0) {
       const factura = {
-        cliente: 0,
+        cliente: $('#ciudad').val(),
+        tipoventa: $('#tipoVenta').val(),
         productos: [],
       };
 
@@ -247,7 +248,7 @@ $(function () {
 
       $.ajax({
         type: "POST",
-        url: `index.php?c=Factura&m=registrar`,
+        url: `ajax/index.php?c=Factura&m=registrar`,
         data: { json_string: JSON.stringify(factura) },
         beforeSend: function () {
           // $("#btnRegistrarPago").attr("disabled", true);
