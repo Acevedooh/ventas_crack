@@ -182,7 +182,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="/ventas_crack/index.php?route=administracionProductos" <?php if ($_GET['route'] == "ventas") { ?> class="nav-link active" <?php } else { ?> class="nav-link" <?php } ?>>
+                                    <a href="/ventas_crack/index.php?route=compras" <?php if ($_GET['route'] == "ventas") { ?> class="nav-link active" <?php } else { ?> class="nav-link" <?php } ?>>
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Administracion de Compra</p>
                                     </a>

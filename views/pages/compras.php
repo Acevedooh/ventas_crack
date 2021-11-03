@@ -12,7 +12,7 @@ $unidad = UnidadController::getUnidad();
         <ol class="breadcrumb float-sm-right">
           <li class="breadcrumb-item"><a href="#">Home</a></li>
           <!-- <li class="breadcrumb-item"><a href="#">Layout</a></li> -->
-          <li class="breadcrumb-item active">Administración de Ventas</li>
+          <li class="breadcrumb-item active">Administración de Compras</li>
         </ol>
       </div>
     </div>
@@ -31,13 +31,13 @@ $unidad = UnidadController::getUnidad();
               <i class="fas fa-edit"></i>
               Registro de Ventas
             </h3>
-            s
+
           </div>
           <div class="card-body">
             <div class="">
               <a href="facturacion">
                 <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalUnidad" id="registrarUnidad">
-                  <strong> + </strong> Ventas
+                  <strong> + </strong> Compras
                 </button>
               </a>
             </div>
@@ -145,7 +145,7 @@ $unidad = UnidadController::getUnidad();
 <!-- END MODAL REGISTRAR EMPLEADO-->
 
 <!-- SCRIPT PERSONAL -->
-<script src="views/assets/js/unidad.js"></script>
+<script src="views/assets/js/compras.js"></script>
 <!-- DataTables  & Plugins -->
 
 <link rel="stylesheet" href="views/assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">

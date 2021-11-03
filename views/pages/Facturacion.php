@@ -33,7 +33,7 @@ $producto = ProductoController::getProducto(null, null);
                 <!-- <div class="box-body"> -->
                 <form role="form" method="POST">
                   <div class="row">
-                    <div class="col-6-lg col-xl-6 col-sm-12">
+                    <div class="col-md-2">
                       <div class="form-group">
                         <div class="input-group">
                           <div class="input-group-prepend">
@@ -44,11 +44,8 @@ $producto = ProductoController::getProducto(null, null);
                         </div>
                       </div>
                     </div>
-                    <div class="col-6-lg col-xl-6 col-sm-12">
-                      <div class="form-group">
-                      </div>
-                    </div>
-                    <div class="col-6-lg col-xl-6 col-sm-12">
+
+                    <div class="col-md-3">
                       <div class="form-group">
                         <!-- <label>Tipo Comprobante</label> -->
                         <select class="form-control" name="idTipoComprobante" id="idTipoComprobante">
@@ -64,7 +61,33 @@ $producto = ProductoController::getProducto(null, null);
                     </div>
 
 
-                    <div class="col-6-lg col-xl-6 col-sm-12">
+
+
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <div class="input-group">
+                          <select class="form-control" name="ciudad" id="ciudad">
+                            <option value='' disabled selected>Seleccione el Cliente</option>
+                            <?php
+                            $cliente = ConsultasController::getDatos('contacto', 'esCliente', true);
+
+                            foreach ($cliente as $index => $key) {
+                              echo "<option value='" . $key['idContacto'] . "'>" . $key['nombre'] . "</option>";
+                            }
+                            ?>
+                          </select>
+                          <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
+                              <i class="icon-database-add"></i> +
+                            </button></span>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
+                    <div class="col-md-4">
                       <div class="form-group">
                         <div class="input-group">
                           <!-- <label for="estado">Estado</label> -->
@@ -83,26 +106,6 @@ $producto = ProductoController::getProducto(null, null);
 
 
 
-                    <div class="col-6-lg col-xl-6 col-sm-12">
-                      <div class="form-group">
-                        <div class="input-group">
-                          <select class="form-control" name="ciudad" id="ciudad">
-                            <option value='' disabled selected>Seleccione el Cliente</option>
-                            <?php
-                            $cliente = ConsultasController::getDatos('contacto', 'esCliente', true);
-
-                            foreach ($cliente as $index => $key) {
-                              echo "<option value='" . $key['idContacto'] . "'>" . $key['nombre'] . "</option>";
-                            }
-                            ?>
-                          </select>
-                          <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
-                              <i class="icon-database-add"></i> Agregar Nuevo
-                            </button></span>
-                        </div>
-                      </div>
-                    </div>
-
 
 
 
@@ -111,7 +114,7 @@ $producto = ProductoController::getProducto(null, null);
 
 
                     <div class="w-100"></div>
-                    <div class="col-md-3 col-sm-12">
+                    <div class="col-md-5 col-sm-12">
                       <div class="form-group">
                         <label for="consultaProducto">Producto</label>
                         <div class="input-group">
@@ -184,7 +187,7 @@ $producto = ProductoController::getProducto(null, null);
 
                       <div class="table-responsive">
                         <table class="table">
-                          <tbody id="bodyProductos">
+                          <tbody>
                             <tr>
                               <th>Productos:</th>
 
@@ -210,18 +213,23 @@ $producto = ProductoController::getProducto(null, null);
                     </div>
                     <!-- /.col -->
                   </div>
-
-
-
-
-
-
-
-
-
-
-                  <!-- 
-                ///////////////////////////// -->
+                  <div class="row">
+                    <!-- accepted payments column -->
+                    <!-- /.col -->
+                    <div class="col-6">
+                    </div>
+                    <div class="col-6"> <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
+                      <button type="button" id="btnFacturar" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Facturar
+                      </button>
+                      <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
+                        <i class="fas fa-download"></i> Generate PDF
+                      </button>
+                      <button type="button" class="btn btn-danger float-right" style="margin-right: 5px;">
+                        <i class="fas fa-download"></i> Cancelar
+                      </button>
+                    </div>
+                    <!-- /.col -->
+                  </div>
                 </form>
               </div>
             </div>
@@ -241,23 +249,7 @@ $producto = ProductoController::getProducto(null, null);
 
 
 
-  <div class="row">
-    <!-- accepted payments column -->
-    <!-- /.col -->
-    <div class="col-6">
-    </div>
-    <div class="col-6"> <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-      <button type="submit" id="btnFacturar" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Facturar
-      </button>
-      <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-        <i class="fas fa-download"></i> Generate PDF
-      </button>
-      <button type="button" class="btn btn-danger float-right" style="margin-right: 5px;">
-        <i class="fas fa-download"></i> Cancelar
-      </button>
-    </div>
-    <!-- /.col -->
-  </div>
+
 
 
 

@@ -91,9 +91,9 @@ $(function () {
               ${importe}
             </td>
             <td>
-              <button type="button" class="btn btn-danger btn-sm eliminar" id><i class="fa fa-trash"></i></button>
+              <button type="button" class="btn btn-danger btn-sm eliminar"><i class="fa fa-trash"></i></button>
             </td>
-          <tr>`;
+          </tr>`;
       $('#bodyProductos').append(html);
     } else {
       $(`#bodyProductos tr[idProducto=${idProducto}]`).each(function () {
@@ -102,7 +102,7 @@ $(function () {
         const precio = Number($(this).find('.precio').html());
 
 
-        $(this).find('input.cantidad').val(Number(cantidad) + Number($('#cantidad').val()));
+        $(this).find('input.cantidadTabla').val(Number(cantidad) + Number($('#cantidad').val()));
         $(this).find('.importe').html(Number(precio) * Number(cantidad).toFixed(2));
       });
 
@@ -110,7 +110,8 @@ $(function () {
       //Cantidad registrada actual
 
     }
-
+    //Recalcular el total
+    calcularTOTALES();
   });
 
   $('#bodyProductos').on('change', '.cantidadTabla', function () {
@@ -128,6 +129,8 @@ $(function () {
     $(this).parent().parent().find('.itbis').html(itbis.toFixed(2));
 
     console.log('input-cantidad');
+
+    calcularTOTALES();
   });
 
   $('#bodyProductos').on('click', '.eliminar', function () {
@@ -223,6 +226,62 @@ $(function () {
   };
 
 
+  $('#btnFacturar').click(function () {
+
+    //Verficar si existe producto en la tabla
+    if ($('#bodyProductos tr').length > 0) {
+      const factura = {
+        cliente: 0,
+        productos: [],
+      };
+
+      $('#bodyProductos tr').each(function () {
+        const idProducto = $(this).attr('idproducto');
+        const cantidad = Number($(this).find('input.cantidadTabla').val());
+        factura.productos.push({
+          idProducto: idProducto,
+          cantidad: cantidad,
+        });
+        // $(this).html();
+      });
+
+      $.ajax({
+        type: "POST",
+        url: `index.php?c=Factura&m=registrar`,
+        data: { json_string: JSON.stringify(factura) },
+        beforeSend: function () {
+          // $("#btnRegistrarPago").attr("disabled", true);
+          // $("#formularioRegistrarFactura").css("opacity", ".5");
+        },
+        success: function (response) {
+          console.log('facturar: ', response);
+        },
+      });
+
+
+      console.log('producto: ', factura);
+    }
+  });
+
+  const calcularTOTALES = () => {
+    let itbis = 0;
+    let importe = 0;
+    let subtotal = 0;
+    const cantidadproductos = $('#bodyProductos tr').length;
+
+    $('#bodyProductos tr').each(function () {
+      itbis += Number($(this).find('.itbis').html());
+      importe += Number($(this).find('.importe').html());
+      subtotal += Number($(this).find('input.cantidadTabla').val()) * Number($(this).find('.precio').html());;
+
+    });
+
+
+    $('#subTotal').html(subtotal);
+    $('#totalItbis').html(itbis);
+    $('#totalImporte').html(importe);
+    $('#totalCantidad').html(cantidadproductos);
+  }
 
 
 
