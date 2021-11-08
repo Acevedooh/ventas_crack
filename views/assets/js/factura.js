@@ -1,18 +1,5 @@
 $(function () {
-  // $("#busqueda").submit((e) => {
-  //   e.preventDefault();
 
-  //   if ($("#codigo").prop("checked")) {
-  //     ///BUSCAR POR EL CODIGO DEL PRODUCTO
-  //     consultarProductoCodigo();
-  //   } else if ($("#descripcion").prop("checked")) {
-  //     ///BUSCAR POR LA DESCRIPCION DEL PRODUCTO
-
-  //     consultarProductoDescripcion();
-  //   }
-  // });
-
-  //Busqueda select de los productos
   $('.select2').select2({
     theme: "bootstrap4",
     placeholder: "Select a option",
@@ -198,32 +185,32 @@ $(function () {
 
 
   //Calcular el total de la compra para mostrarlo en el DOM
-  const calcularTotalDOM = () => {
-    let importe = 0;
-    let cantidad = 0;
-    let itbis = 0;
-    $("#bodyProductos")
-      .first()
-      .find("tr")
-      .each(function () {
-        // console.log('valor: ', $(this).find('.cantidad').html());
-        importe += Number($(this).find(".importe").html());
-        cantidad += Number($(this).find(".input-cantidad").val());
-        itbis += Number($(this).find(".itbis").html());
-      });
+  // const calcularTotalDOM = () => {
+  //   let importe = 0;
+  //   let cantidad = 0;
+  //   let itbis = 0;
+  //   $("#bodyProductos")
+  //     .first()
+  //     .find("tr")
+  //     .each(function () {
+  //       // console.log('valor: ', $(this).find('.cantidad').html());
+  //       importe += Number($(this).find(".importe").html());
+  //       cantidad += Number($(this).find(".input-cantidad").val());
+  //       itbis += Number($(this).find(".itbis").html());
+  //     });
 
 
 
-    itbis = Number(itbis).toFixed(2);
-    importe = Number(importe).toFixed(2);
+  //   itbis = Number(itbis).toFixed(2);
+  //   importe = Number(importe).toFixed(2);
 
-    console.log("itbis: ", $(this).find(".itbis").html());
-    console.log("importe: ", $(this).find(".importe").html());
+  //   console.log("itbis: ", $(this).find(".itbis").html());
+  //   console.log("importe: ", $(this).find(".importe").html());
 
-    $("#totalCantidad").html(cantidad);
-    $("#totalItbis").html(itbis);
-    $("#totalImporte").html(Math.round(importe));
-  };
+  //   $("#totalCantidad").html(cantidad);
+  //   $("#totalItbis").html(itbis);
+  //   $("#totalImporte").html(Math.round(importe));
+  // };
 
 
   $('#btnFacturar').click(function () {

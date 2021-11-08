@@ -41,6 +41,8 @@ $(function () {
 
       // $('#cantidad').focus().select();
       $('#precio').val(data.precio);
+      // $('#descripcion').val(data.nombrePro);
+
       console.log("data: ", data);
       var $contenedor = $(`<option value='${data.id}'>${data.text + '-'}</option>`);
       // const $contenedor = $(``);
@@ -95,7 +97,7 @@ $(function () {
         const precio = Number($(this).find('.precio').html());
 
 
-        $(this).find('input.cantidad').val(Number(cantidad) + Number($('#cantidad').val()));
+        $(this).find('input.cantidadTabla').val(Number(cantidad) + Number($('#cantidad').val()));
         $(this).find('.importe').html(Number(precio) * Number(cantidad).toFixed(2));
       });
 
@@ -104,12 +106,64 @@ $(function () {
 
     }
 
+    //Recalcular total
+
+    calcularTOTALES();
+
+
   });
+
+
+
+
+
+  $('#bodyProductos').on('change', '.cantidadTabla', function () {
+
+
+    console.log('input-cantidad', Number($(this).parent().parent().find('.precio').html()));
+    const precio = Number($(this).parent().parent().find('.precio').html());
+    const cantidad = Number($(this).parent().find('.cantidadTabla').val());
+
+    const subtotal = precio * cantidad;
+    const itbis = subtotal * 0.18;
+    const importe = subtotal + itbis;
+
+    $(this).parent().parent().find('.importe').html(importe.toFixed(2));
+    $(this).parent().parent().find('.itbis').html(itbis.toFixed(2));
+
+    console.log('input-cantidad');
+
+    calcularTOTALES();
+  });
+
+
 
 
   $('#bodyProductos').on('click', '.eliminar', function () {
     $(this).parent().parent().remove();
   });
+
+
+
+  const calcularTOTALES = () => {
+    let itbis = 0;
+    let importe = 0;
+    let subtotal = 0;
+    const cantidadproductos = $('#bodyProductos tr').length;
+
+    $('#bodyProductos tr').each(function () {
+      itbis += Number($(this).find('.itbis').html());
+      importe += Number($(this).find('.importe').html());
+      subtotal += Number($(this).find('input.cantidadTabla').val()) * Number($(this).find('.precio').html());;
+
+    });
+
+
+    $('#subTotal').html(subtotal);
+    $('#totalItbis').html(itbis);
+    $('#totalImporte').html(importe);
+    $('#totalCantidad').html(cantidadproductos);
+  }
 
 
 
