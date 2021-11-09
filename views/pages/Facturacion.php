@@ -31,7 +31,7 @@ $producto = ProductoController::getProducto(null, null);
             <div class="card hovercard">
               <div class="card-body">
                 <!-- <div class="box-body"> -->
-                <form role="form" method="POST">
+                <form id="facturacion" method="POST">
                   <div class="row">
                     <div class="col-md-2">
                       <div class="form-group">
@@ -76,7 +76,7 @@ $producto = ProductoController::getProducto(null, null);
                             }
                             ?>
                           </select>
-                          <span class="input-group-addon"> <button class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
+                          <span> <button type="button" class="btn btn-info mb-3" data-toggle="modal" data-target="#modalContactoRegister" id="registroContacto">
                               <i class="icon-database-add"></i> +
                             </button></span>
                         </div>
@@ -213,7 +213,7 @@ $producto = ProductoController::getProducto(null, null);
                     <div class="col-6">
                     </div>
                     <div class="col-6"> <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                      <button type="button" id="btnFacturar" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Facturar
+                      <button type="submit" id="btnFacturar" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Facturar
                       </button>
                       <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
                         <i class="fas fa-download"></i> Generate PDF
@@ -225,12 +225,24 @@ $producto = ProductoController::getProducto(null, null);
                     <!-- /.col -->
                   </div>
                 </form>
+
+
               </div>
             </div>
           </div>
         </div>
       </div>
+
+
     </div>
+
+
+
+
+
+
+
+
     <!-- /.col -->
   </div>
   <!-- /.row -->
@@ -252,12 +264,18 @@ $producto = ProductoController::getProducto(null, null);
   <div class="modal fade text-left" id="modalRegistroFactura" tabindex="-1" role="dialog" aria-labelledby="tituloModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="tituloModal">Agregar pago </h4>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <i data-feather="x"></i>
+
+        <div class="modal-header bg-info">
+          <h4 class="modal-title" id="tituloModal">Register Contacto</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
           </button>
         </div>
+        <!-- <h4 class="modal-title" id="tituloModal">Agregar pago </h4>
+          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+            <i data-feather="x"></i>
+          </button> -->
+
         <div class="modal-body">
 
           <form id="formularioRegistrarFactura">
@@ -332,7 +350,11 @@ $producto = ProductoController::getProducto(null, null);
               </div>
 
               <div class="col-12">
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button>
+                  <button type="submit" class="btn btn-info" id="btnRegistrarPago" disabled>Save changes</button>
+                </div>
+                <!-- <div class="modal-footer">
                   <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
                     <i class="bx bx-x d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Cerrar</span>
@@ -341,7 +363,7 @@ $producto = ProductoController::getProducto(null, null);
                     <i class="bx bx-check d-block d-sm-none"></i>
                     <span class="d-none d-sm-block">Procesar</span>
                   </button>
-                </div>
+                </div> -->
               </div>
             </div>
           </form>
@@ -350,7 +372,6 @@ $producto = ProductoController::getProducto(null, null);
     </div>
   </div>
   <!-- FIN REGISTRAR PAGO MODAL -->
-
 
 
 
@@ -516,6 +537,7 @@ $producto = ProductoController::getProducto(null, null);
     </div>
     <!-- /.modal-dialog -->
   </div>
+
 
 
 

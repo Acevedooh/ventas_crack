@@ -297,6 +297,21 @@ $(function () {
 
 
 
+  $("#registroContacto").click(function () {
+    $("#modalContactoRegister").modal("show");
+
+
+
+  });
+
+
+
+
+
+
+
+
+
   ///FACTURAR
   $("#btnFacturar").click(function () { });
 
@@ -331,7 +346,7 @@ $(function () {
   });
 
   $("#tipoVenta").change(function () {
-    if ($(this).val() === "contado") {
+    if ($(this).val() === "descripcion") {
       $("#credito").prop("disabled", true);
       $("#pagoEfectivo").prop("disabled", false);
       $("#transferencia").prop("disabled", false);

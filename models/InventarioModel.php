@@ -19,7 +19,7 @@ class InventarioModel
             pr.nombre AS creado_por,
             a.activo
           FROM almacen a
-          INNER JOIN usuario u ON u.idUsuario = a.creado_por
+          INNER JOIN User u ON u.idUsuario = a.creado_por
           INNER JOIN persona pr ON u.idPersona = pr.idPersona
           LEFT JOIN direccion d ON a.idTercero = d.idTercero
           LEFT JOIN ciudad c ON d.idCiudad = c.idCiudad
@@ -42,22 +42,43 @@ class InventarioModel
       $dbh->execute();
       $idTercero = $stm->lastInsertId();
 
-      if (strlen(trim($data['provincia'])) || strlen(trim($data['ciudad'])) > 0 || strlen(trim($data['sector'])) > 0 || strlen(trim($data['direccion'])) > 0) {
+      // if (strlen(trim($data['provincia'])) || strlen(trim($data['ciudad'])) > 0 || strlen(trim($data['sector'])) > 0 || strlen(trim($data['direccion'])) > 0) {
 
-        $dbh = $stm->prepare("INSERT INTO direccion(idTercero, idProvincia, idCiudad, sector, direccion)
-          VALUES(:idTercero, :provincia, :ciudad, :sector, :direccion)");
-        $dbh->bindParam(":idTercero", $idTercero, PDO::PARAM_INT);
-        $dbh->bindParam(":provincia", $data['provincia'], PDO::PARAM_INT);
-        $dbh->bindParam(":ciudad", $data['ciudad'], PDO::PARAM_INT);
-        $dbh->bindParam(":sector", $data['sector'], PDO::PARAM_STR);
-        $dbh->bindParam(":direccion", $data['direccion'], PDO::PARAM_STR);
-        $dbh->execute();
+      //   $dbh = $stm->prepare("INSERT INTO direccion(idTercero, idProvincia, idCiudad, sector, direccion)
+      //     VALUES(:idTercero, :provincia, :ciudad, :sector, :direccion)");
+      //   $dbh->bindParam(":idTercero", $idTercero, PDO::PARAM_INT);
+      //   $dbh->bindParam(":provincia", $data['provincia'], PDO::PARAM_INT);
+      //   $dbh->bindParam(":ciudad", $data['ciudad'], PDO::PARAM_INT);
+      //   $dbh->bindParam(":sector", $data['sector'], PDO::PARAM_STR);
+      //   $dbh->bindParam(":direccion", $data['direccion'], PDO::PARAM_STR);
+      //   $dbh->execute();
+      // }
+
+
+      if (isset($datos["provincia"]) && !empty($datos["provincia"])) {
+        $stm->exec("INSERT INTO provincia(provincia)
+        VALUES('" . $datos["provincia"] . "')");
+        $idProvincia = $stm->lastInsertId();
+
+        $stm->exec("INSERT INTO ciudad(idProvincia, ciudad)
+        VALUES('" . $datos["ciudad"] . "')");
+        $idCiudad = $stm->lastInsertId();
+
+        $stm->exec("INSERT INTO direccion(idProvincia, idCiudad)
+          VALUES($idProvincia, $idCiudad)");
+        $idDireccion = $stm->lastInsertId();
+
+        $stm->exec("INSERT INTO tercero_direccion(idTercero, idDireccion)
+        VALUES($idTercero, $idDireccion)");
       }
 
 
-      $dbh = $stm->prepare("INSERT INTO almacen(idTercero, descripcion, creado_por, activo) VALUES(:idTercero, :descripcion, :creado_por, :estado)");
+
+
+
+      $dbh = $stm->prepare("INSERT INTO almacen(idTercero, descripcion, creado_por, activo) VALUES(:idTercero, :nombre, :creado_por, :estado)");
       $dbh->bindParam(":idTercero", $idTercero, PDO::PARAM_STR);
-      $dbh->bindParam(":descripcion", $data['nombre'], PDO::PARAM_STR);
+      $dbh->bindParam(":nombre", $data['nombre'], PDO::PARAM_STR);
       $dbh->bindParam(":creado_por", $data['creado_por'], PDO::PARAM_INT);
       $dbh->bindParam(":estado", $data['estado'], PDO::PARAM_BOOL);
       $dbh->execute();
