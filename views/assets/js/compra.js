@@ -76,8 +76,6 @@ $(function () {
       const html =
         `<tr idProducto=${idProducto}>
            <td class='descripcion'>${nombre}</td>
-
-       
             <td class='cantidad'>
               <input type='number' class='form-control cantidadTabla' style='width: auto' min='1' value='${cantidad}'>
             </td>
