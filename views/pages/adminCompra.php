@@ -44,12 +44,12 @@ $unidad = ProductoController::getUnidad(null, null);
           <div class="card-body">
 
 
-            <form>
+            <form role="form" method="POST">
               <div class="row">
 
                 <!-- ////////////////
-          VENDEDOR/COMPRADOR
-          ////////////////////// -->
+                      VENDEDOR/COMPRADOR
+                      ////////////////////// -->
                 <div class="col-md-2">
                   <div class="form-group">
                     <label>Comprador</label>
@@ -65,9 +65,9 @@ $unidad = ProductoController::getUnidad(null, null);
                 </div>
 
                 <!-- 
-            /////////////////////////
-              PROVEDOOR
-              //////////////////// -->
+                      /////////////////////////
+                        PROVEDOOR
+                        //////////////////// -->
                 <div class="col-md-4">
                   <div class="form-group">
                     <label>Provedoor</label>
@@ -94,8 +94,8 @@ $unidad = ProductoController::getUnidad(null, null);
 
 
                 <!-- /////////////////////////////
-            BUSCAR PRODUCTO
-          //////////////////////////////                   -->
+                        BUSCAR PRODUCTO
+                      //////////////////////////////-->
 
                 <div class="col-md-6">
                   <div class="form-group">
@@ -172,105 +172,85 @@ $unidad = ProductoController::getUnidad(null, null);
 
               </div>
 
-          </div>
 
 
-
-
-        </div>
-
-
-        <!-- TABLA DE PRODUCTO -->
-        <div class="row">
-          <div class="card-body table-responsive p-0" style="height: 200px;">
-            <table class="table table-light-fixed text-nowrap">
-              <thead class="thead-dark">
-                <tr scope="row">
-                  <!-- <th scope=" col">ID</th>
+              <!-- TABLA DE PRODUCTO -->
+              <div class="row">
+                <div class="card-body table-responsive p-0" style="height: 200px;">
+                  <table class="table table-light-fixed text-nowrap">
+                    <thead class="thead-dark">
+                      <tr scope="row">
+                        <!-- <th scope=" col">ID</th>
                   <th scope=" col">Codigo</th> -->
-                  <th scope=" col">Descripcion</th>
-                  <th scope="col">Cantidad</th>
-                  <th scope="col">Precio</th>
-                  <!-- <th scope="col">Sub Total</th> -->
+                        <th scope=" col">Descripcion</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Precio</th>
+                        <!-- <th scope="col">Sub Total</th> -->
 
-                  <th scope="col">Acción</th>
-                </tr>
-              </thead>
-              <tbody id="bodyProductos">
-              </tbody>
+                        <th scope="col">Acción</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bodyProductos">
+                    </tbody>
 
-            </table>
-          </div>
-          <!-- /.col -->
-        </div>
-
-
-        <!-- TABLA DE TOTALES ETC -->
-        <div class="row">
-          <!-- accepted payments column -->
-          <!-- <div class="col-6">
-                  <p class="lead">Metodo De Pago:</p>
-                  <img src="views/assets/img/credit/visa.png" alt="Visa">
-                  <img src="views/assets/img/credit/mastercard.png" alt="Mastercard">
-                  <img src="views/assets/img/credit/american-express.png" alt="American Express">
-                  <img src="views/assets/img/credit/paypal2.png" alt="Paypal">
-
-                  <p class="text-muted well well-sm shadow-none" style="margin-top: 10px;">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
-                    plugg
-                    dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                  </p>
-                </div> -->
-          <!-- /.col -->
-          <div class="col-6">
-
-            <div class="table-responsive">
-              <!-- <div class="card card-info card-outline"></div> -->
-
-              <div class="card-body">
-                <p class="lead">Monto Adeudado 2/22/2014</p>
-
-                <table class="table">
-                  <tbody id="bodyProductos">
-                    <tr>
-                      <th>Productos:</th>
-
-                      <td id="totalCantidad" align="center" colspan="2">0.00</td>
-                    </tr>
-                    <tr>
-                      <th style="width:50%">Subtotal:</th>
-
-                      <td id="subTotal" align="center" colspan="2">0.00</td>
-                    </tr>
-                    <tr>
-                      <th>Itbis 18%</th>
-
-                      <td id="totalItbis" align="center" colspan="2">0.00</td>
-                    </tr>
-                    <th>Total:</th>
-
-                    <td id="totalImporte" align="center" colspan="2">0.00</td>
-                    </tr>
-                  </tbody>
-                </table>
+                  </table>
+                </div>
+                <!-- /.col -->
               </div>
-              <!-- </div> -->
 
-            </div>
+
+              <!-- TABLA DE TOTALES ETC -->
+              <div class="row">
+
+                <div class="col-6">
+
+                  <div class="table-responsive">
+                    <!-- <div class="card card-info card-outline"></div> -->
+
+                    <div class="card-body">
+                      <p class="lead">Monto Adeudado 2/22/2014</p>
+
+                      <table class="table">
+                        <tbody id="bodyProductos">
+                          <tr>
+                            <th>Productos:</th>
+
+                            <td id="totalCantidad" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <tr>
+                            <th style="width:50%">Subtotal:</th>
+
+                            <td id="subTotal" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <tr>
+                            <th>Itbis 18%</th>
+
+                            <td id="totalItbis" align="center" colspan="2">0.00</td>
+                          </tr>
+                          <th>Total:</th>
+
+                          <td id="totalImporte" align="center" colspan="2">0.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <!-- </div> -->
+
+                  </div>
+                </div>
+                <!-- /.col -->
+              </div>
+              <div class="modal-footer justify-content-between">
+                <!-- <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button> -->
+                <button type="submit" class="btn btn-info">Generar Compra</button>
+              </div>
+            </form>
           </div>
-          <!-- /.col -->
         </div>
-        <div class="modal-footer justify-content-between">
-          <!-- <button type="button" class="btn btn-default" id="close" data-dismiss="modal">Close</button> -->
-          <button type="submit" class="btn btn-info">Generar Compra</button>
-        </div>
-
       </div>
     </div>
-
   </div>
 
-  </form>
 
 
 
@@ -284,9 +264,8 @@ $unidad = ProductoController::getUnidad(null, null);
   </div>
   </div>
   <!-- /.card -->
-  </div>
-  </div>
-  </div>
+
+
 </section>
 
 

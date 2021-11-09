@@ -2,7 +2,7 @@ $(function () {
 
   $('.select2').select2({
     theme: "bootstrap4",
-    placeholder: "Select a option",
+    placeholder: "Buscar  Producto",
     minimumInputLength: 3,
     ajax: {
       url: 'ajax/index.php?c=Producto&m=getConsultaProducto',
@@ -218,7 +218,7 @@ $(function () {
     //Verficar si existe producto en la tabla
     if ($('#bodyProductos tr').length > 0) {
       const factura = {
-        cliente: $('#ciudad').val(),
+        cliente: $('#cliente').val(),
         tipoventa: $('#tipoVenta').val(),
         productos: [],
       };

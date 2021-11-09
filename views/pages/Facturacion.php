@@ -66,7 +66,7 @@ $producto = ProductoController::getProducto(null, null);
                     <div class="col-md-3">
                       <div class="form-group">
                         <div class="input-group">
-                          <select class="form-control" name="ciudad" id="ciudad">
+                          <select class="form-control" name="cliente" id="cliente">
                             <option value='' disabled selected>Seleccione el Cliente</option>
                             <?php
                             $cliente = ConsultasController::getDatos('contacto', 'esCliente', true);
@@ -94,23 +94,17 @@ $producto = ProductoController::getProducto(null, null);
                           <select id="tipoVenta" class="form-control" name="tipoVenta" required>
                             <option value="0" disabled selected>Seleccione Tipo Venta</option>
 
-                            <option value="contado">Contado</option>
-                            <option value="credito">Credito</option>
-                            <option value="compuesto">Compuesto</option>
+                            <?php
+                            $cliente = ConsultasController::getDatos('tipo_venta', null, null);
+
+                            foreach ($cliente as $index => $key) {
+                              echo "<option value='" . $key['idTipoVenta'] . "'>" . $key['descripcion'] . "</option>";
+                            }
+                            ?>
                           </select>
                         </div>
                       </div>
                     </div>
-
-
-
-
-
-
-
-
-
-
 
 
                     <div class="w-100"></div>
@@ -147,7 +141,7 @@ $producto = ProductoController::getProducto(null, null);
 
                   <div class="row">
                     <div class="card-body table-responsive p-0" style="height: 300px;">
-                      <table class="table table-head-fixed text-nowrap">
+                      <table class="table table-head-fixed      text-nowrap">
                         <thead>
                           <tr scope="row">
                             <th scope=" col">Descripcion</th>
@@ -190,7 +184,7 @@ $producto = ProductoController::getProducto(null, null);
                           <tbody>
                             <tr>
                               <th>Productos:</th>
-
+                              <span class="badge bg-primary rounded-pill" id="cantidadProductoModal">0.00</span>
                               <td id="totalCantidad" align="center" colspan="2">0</td>
                             </tr>
                             <tr>
