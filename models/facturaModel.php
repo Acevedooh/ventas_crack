@@ -33,14 +33,29 @@ class FacturaModel
 
     try {
 
-      $contado = $data['pagoEfectivo'] > 0 ? TRUE : FALSE;
-      $credito = $data['credito'] > 0 ? TRUE : FALSE;
+      /**
+       * ESTADOS DE LAS FACTURAS
+       * 1 PENDIENTE
+       * 2 PAGADA
+       * 3 CANCELADA
+       * 4 PAGADA
+       * 5 INCOBRABLE
+       */
+      $estado = 2;
+      if($data['credito'] > 0) {
+        $estado = 1; //FACTURA A CREDITO
+      }
 
-      print_r($data);
-      $dbh = $stm->prepare("INSERT INTO factura(idUser,idCliente) 
-                VALUES(:creado_por, :cliente)");
+      // print_r($data);
+      $dbh = $stm->prepare("INSERT INTO factura(idUser,idCliente, idTipoVenta, pagoEfectivo, pagoTransferencia, credito, idEstado) 
+                VALUES(:creado_por, :cliente, :tipoFactura, :pagoEfectivo, :pagoTransferencia, :credito, :estado)");
 
       $dbh->bindParam(":cliente", $data['cliente'], PDO::PARAM_INT);
+      $dbh->bindParam(":tipoFactura", $data['tipoFactura'], PDO::PARAM_INT);
+      $dbh->bindParam(":pagoEfectivo", $data['pagoEfectivo'], PDO::PARAM_INT);
+      $dbh->bindParam(":pagoTransferencia", $data['pagoTransferencia'], PDO::PARAM_INT);
+      $dbh->bindParam(":credito", $data['credito'], PDO::PARAM_INT);
+      $dbh->bindParam(":estado", $estado, PDO::PARAM_INT);
       $dbh->bindParam(":creado_por", $data['creado_por'], PDO::PARAM_INT);
       $dbh->execute();
       $numfactura = $stm->lastInsertId();
@@ -75,8 +90,8 @@ class FacturaModel
         // $itbis = number_format($key->itbis, 2);
         $dbh->bindParam(":numFactura", $numfactura, PDO::PARAM_INT);
         $dbh->bindParam(":idProducto", $key->idProducto, PDO::PARAM_INT);
-        $dbh->bindParam(":cantidad1", $cantidad, PDO::PARAM_INT);
-        $dbh->bindParam(":cantidad2", $cantidad, PDO::PARAM_INT);
+        $dbh->bindParam(":cantidad1", $key->cantidad, PDO::PARAM_INT);
+        $dbh->bindParam(":cantidad2", $key->cantidad, PDO::PARAM_INT);
         // $dbh->bindParam(":itbis", $itbis, PDO::PARAM_STR);
         $dbh->execute();
         // $idFactura = $stm->count();

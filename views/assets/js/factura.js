@@ -287,7 +287,10 @@ $(function () {
     $("#totalModal").html($("#totalImporte").html());
     $("#cantidadProductoModal").html($("#totalCantidad").html());
 
-    $("#montoApagar").val($("#totalImporte").html());
+    const monto = Number($("#totalImporte").html()).toFixed(0);
+    $("#montoApagar").val(monto);
+
+    $('#pagoEfectivo').val(monto);
 
     console.log("Facturando...");
   });
@@ -335,13 +338,13 @@ $(function () {
 
     if (montoApagar == 0) {
       //Inabilitar el boton de guardar
-      $("#btnRegistrarPago").prop("disabled", false);
+      // $("#btnRegistrarPago").prop("disabled", false);
       $("#cantidadDevolver").removeClass("is-invalid");
       $("#cantidadDevolver").addClass("is-valid");
     } else {
       $("#cantidadDevolver").removeClass("is-valid");
       $("#cantidadDevolver").addClass("is-invalid");
-      $("#btnRegistrarPago").prop("disabled", true);
+      // $("#btnRegistrarPago").prop("disabled", true);
     }
   });
 
@@ -395,6 +398,7 @@ $(function () {
     $("#modalFactura").modal("show");
 
     const factura = {
+      cliente: $('#cliente').val(),
       tipoFactura: $('#tipoVenta').val(),
       pagoEfectivo: Number($('#pagoEfectivo').val()),
       pagoTransferencia: Number($('#transferencia').val()),
@@ -403,6 +407,7 @@ $(function () {
       productos: []
     };
 
+    // console.log()
 
     //ITERAR SOBRE TODOS LOS PRODUCTOS AGREGADO AL CARRITO PARA FACTURAR
     $("#bodyProductos tr").each(function () {
@@ -412,7 +417,7 @@ $(function () {
 
       factura.productos.push({
         idProducto: Number(idProducto),
-        cantidad: Number($(this).find(".input-cantidad").val()),
+        cantidad: Number($(this).find(".cantidadTabla").val()),
         precio: Number($(this).find(".precio").html()),
         itbis: Number($(this).find(".itbis").html()),
       });
@@ -422,8 +427,9 @@ $(function () {
 
     $.ajax({
       type: "POST",
-      url: `index.php?c=Factura&m=registrar`,
+      url: `ajax/index.php?c=Factura&m=registrar`,
       data: { json_string: JSON.stringify(factura) },
+      dataType: "json",
       beforeSend: function () {
         // $("#btnRegistrarPago").attr("disabled", true);
         // $("#formularioRegistrarFactura").css("opacity", ".5");
@@ -431,11 +437,7 @@ $(function () {
       success: function (response) {
         console.log("prueba: ", response);
         if (response.success) {
-          Swal.fire("Bien!!", `${response.msg}!`, "success").then((result) => {
-            if (result.isConfirmed) {
-              location.reload();
-            }
-          });
+          alert('Se ha guardado de forma correcta !!');
         } else {
           Swal.fire("Error!", `${response.msg}!`, "error");
         }

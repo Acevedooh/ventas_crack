@@ -23,18 +23,21 @@ class FacturaController
 
     $data = array(
       "tipoFactura" => $datos->tipoFactura,
-      "formaPago" => $datos->formaPago,
       "cliente" => $datos->cliente,
-
-      "tipoVenta" => $datos->tipoVenta, //Creito o al contado 
+      "pagoEfectivo" => $datos->pagoEfectivo,
+      "pagoTransferencia" => $datos->pagoTransferencia,
+      "credito" => $datos->credito,
+      // "tipoVenta" => $datos->tipoVenta, //Creito o al contado 
       "nota" => $datos->nota,
       "productos" => $datos->productos,
       "creado_por" => $_SESSION['idUser']
     );
 
+    // print_r($data);
+
 
     $resultados = FacturaModel::registrar($data);
-    echo $resultados['numeroFactura'] . "fasdf";
+    // echo $resultados['numeroFactura'] . "fasdf";
     if (isset($resultados['numeroFactura']) && $resultados['numeroFactura'] > 0) {
       $resultados['html'] = FacturaController::getfacturaHTML($resultados['numeroFactura']);
     }
@@ -45,7 +48,7 @@ class FacturaController
   public static function getfacturaHTML($numfactura)
   {
     $resultados = FacturaModel::getFactura($numfactura);
-    print_r($resultados);
+    // print_r($resultados);
 
     $html = 'hOLA MUNDO';
     return $html;
